@@ -41,6 +41,7 @@ int matTemAte_[MAX_BER][MAX_NAV]; // matriz com o tempo de atendimento de cada n
 int vetIndNavOrd_[MAX_NAV];
 int vetPosIniBer_[MAX_BER];
 int vetPosFinBer_[MAX_BER];
+int vetTamTotalBer_[MAX_BER]; // tamanho total que x berco pode ocupar
 
 
 //********************************* M�TODOS **********************************
@@ -57,6 +58,8 @@ void ordenar_navios(int *vetInd, int *vetVal);
 void testar_instancia(char *arq);
 void atualizar_dimensoes_bercos();
 void ler_instancia(char *arq);
+void criar_solucao_por_tamanho(Solucao &s);
+void descobre_tam_total_dos_bercos();
 
 // novo
 void testaVNS(int Inst, int Vez);

@@ -645,7 +645,8 @@ void testaVNS(int Inst, int Vez){
    ler_instancia(arq);
    ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
    atualizar_dimensoes_bercos();
-   criar_solucao(s);
+   // criar_solucao(s);
+   criar_solucao_por_tamanho(s);
    calc_fo(s);
 
    // printf("%d\n", s.maiorQtdNavBer);
@@ -901,4 +902,61 @@ void gerarViz4(Solucao &S){ //Troca somente um navio de berco aleatório varias 
 
    inicializar_hor_pos_navios(S);
    calc_fo(S);
+}
+
+void criar_solucao_por_tamanho(Solucao &s)
+{
+   int nav, ber, aux;
+   descobre_tam_total_dos_bercos();
+   memset(&s.vetQtdNavBer, 0, sizeof(s.vetQtdNavBer));
+   memset(&s.matSol, -1, sizeof(s.matSol));
+   ber = 0;
+   s.maiorQtdNavBer = 0;
+   for (int i = 0; i < numNav_; i++)
+   {
+      nav = vetIndNavOrd_[i];
+      if (matTemAte_[ber][nav] == 0)
+      {
+         aux = 0;
+         while (matTemAte_[aux][nav] == 0)
+            aux++;
+         s.matSol[aux][s.vetQtdNavBer[aux]] = nav;
+         s.vetIdBerNav[nav] = aux;
+         s.vetQtdNavBer[aux]++;
+      }
+      else
+      {
+         s.matSol[ber][s.vetQtdNavBer[ber]] = nav;
+         s.vetIdBerNav[nav] = ber;
+         s.vetQtdNavBer[ber]++;
+         ber++;
+         if (ber == numBer_)
+            ber = 0;
+      }
+   }
+   for (int i = 0; i < numBer_; i++)
+      if(s.vetQtdNavBer[i] >= s.maiorQtdNavBer)
+         s.maiorQtdNavBer = s.vetQtdNavBer[i];
+
+   
+   inicializar_hor_pos_navios(s);
+}
+
+void descobre_tam_total_dos_bercos(){
+   for (int i = 0; i < numBer_; i++){
+
+      vetTamTotalBer_[i] = vetTamLEBer_[i] + vetTamLDBer_[i];
+      if( i != 0 && vetTamLDBer_[i-1] != 0 ){
+         vetTamTotalBer_[i] += vetTamLDBer_[i-1];
+      } else if( i != numBer_ && vetTamLEBer_[i+1] != 0){
+         vetTamTotalBer_[i] += vetTamLEBer_[i+1];
+      }
+   }
+
+   for (int i = 0; i < numBer_; i++)
+   {
+      printf("%d", vetTamTotalBer_[i]);
+   }
+   
+   
 }
