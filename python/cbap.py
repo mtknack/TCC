@@ -3,12 +3,19 @@ import plotly.graph_objects as go
 import plotly.io as pio
 pio.renderers.default='browser'
 
-inst_id = 4
-inst_vez = 4
-inst_fo = 1351
-arq_instancia = '../instancias/inst' + str(inst_id) + '.txt'
+inst_id = 1
+inst_vez = 6
+inst_fo = 3137
+
+# LINUX
+# arq_instancia = '..//instancias/inst' + str(inst_id) + '.txt'
 # arq_solucao = '..//boas-inst/inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
-arq_solucao = '..//instancias/inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
+# arq_solucao = '..//instancias/inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
+
+# WINDOWS
+arq_instancia = '.\instancias\inst' + str(inst_id) + '.txt'
+# arq_solucao = '..//boas-inst/inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
+arq_solucao = '.\instancias\inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
 
 #-----------------------------------------------------------------------------------------------------------------------
 def ler_instancia(arq_inst):

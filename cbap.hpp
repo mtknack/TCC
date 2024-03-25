@@ -42,6 +42,8 @@ int vetIndNavOrd_[MAX_NAV];
 int vetPosIniBer_[MAX_BER];
 int vetPosFinBer_[MAX_BER];
 int vetTamTotalBer_[MAX_BER]; // tamanho total que x berco pode ocupar
+int vetIdBerOrdTamTotal_[MAX_BER]; // id do berco ordenado pelo seu tamanho crescente
+int vetDisponivelBerco_[MAX_BER]; // indica se o berco na linha atual está disponivel para alocar um navio
 
 
 //********************************* M�TODOS **********************************
@@ -60,6 +62,7 @@ void atualizar_dimensoes_bercos();
 void ler_instancia(char *arq);
 void criar_solucao_por_tamanho(Solucao &s);
 void descobre_tam_total_dos_bercos();
+void ordernar_berco_asc();
 
 // novo
 void testaVNS(int Inst, int Vez);

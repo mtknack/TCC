@@ -37,7 +37,7 @@ int main()
 
    
    // TESTE UNICO DE INSTANCIA
-   testaVNS(1, 5);
+   testaVNS(1, 6);
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -646,6 +646,7 @@ void testaVNS(int Inst, int Vez){
    ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
    atualizar_dimensoes_bercos();
    // criar_solucao(s);
+   descobre_tam_total_dos_bercos();
    criar_solucao_por_tamanho(s);
    calc_fo(s);
 
@@ -664,7 +665,7 @@ void testaVNS(int Inst, int Vez){
    double ITmaxTempo = 120;//Segundos
    int qtd = -1;
    int qViz = 3;
-   VNS(s, ITmaxTempo, qViz, qtd);
+   // VNS(s, ITmaxTempo, qViz, qtd);
    calc_fo(s);
    h = clock() - h; 
    tempo = (double)h/CLOCKS_PER_SEC;
@@ -907,15 +908,15 @@ void gerarViz4(Solucao &S){ //Troca somente um navio de berco aleatório varias 
 void criar_solucao_por_tamanho(Solucao &s)
 {
    int nav, ber, aux;
-   descobre_tam_total_dos_bercos();
    memset(&s.vetQtdNavBer, 0, sizeof(s.vetQtdNavBer));
    memset(&s.matSol, -1, sizeof(s.matSol));
+
    ber = 0;
    s.maiorQtdNavBer = 0;
    for (int i = 0; i < numNav_; i++)
    {
       nav = vetIndNavOrd_[i];
-      if (matTemAte_[ber][nav] == 0)
+      if (matTemAte_[vetIdBerOrdTamTotal_[ber]][nav] == 0)
       {
          aux = 0;
          while (matTemAte_[aux][nav] == 0)
@@ -926,9 +927,9 @@ void criar_solucao_por_tamanho(Solucao &s)
       }
       else
       {
-         s.matSol[ber][s.vetQtdNavBer[ber]] = nav;
-         s.vetIdBerNav[nav] = ber;
-         s.vetQtdNavBer[ber]++;
+         s.matSol[vetIdBerOrdTamTotal_[ber]][s.vetQtdNavBer[vetIdBerOrdTamTotal_[ber]]] = nav;
+         s.vetIdBerNav[nav] = vetIdBerOrdTamTotal_[ber];
+         s.vetQtdNavBer[vetIdBerOrdTamTotal_[ber]]++;
          ber++;
          if (ber == numBer_)
             ber = 0;
@@ -951,12 +952,48 @@ void descobre_tam_total_dos_bercos(){
       } else if( i != numBer_ && vetTamLEBer_[i+1] != 0){
          vetTamTotalBer_[i] += vetTamLEBer_[i+1];
       }
+
+      vetIdBerOrdTamTotal_[i] = i; // somente para preencher o vetor com os ids
    }
 
    for (int i = 0; i < numBer_; i++)
    {
-      printf("%d", vetTamTotalBer_[i]);
+      printf("%d - ", vetTamTotalBer_[i]);
+   }
+   printf("\n");
+   for (int i = 0; i < numBer_; i++)
+   {
+      printf("%d - ", vetIdBerOrdTamTotal_[i]);
+   }
+
+   printf("\n");
+   ordernar_berco_asc();
+
+   for (int i = 0; i < numBer_; i++)
+   {
+      printf("%d - ", vetTamTotalBer_[i]);
+   }
+   printf("\n");
+   for (int i = 0; i < numBer_; i++)
+   {
+      printf("%d - ", vetIdBerOrdTamTotal_[i]);
    }
    
-   
+}
+
+void ordernar_berco_asc(){
+   int auxTam, auxId;
+   for (int i = 0; i < (numBer_ - 1); i++){
+      for (int j = i; j < (numBer_); j++){
+         if(vetTamTotalBer_[i] > vetTamTotalBer_[j]){
+            auxTam = vetTamTotalBer_[i];
+            vetTamTotalBer_[i] = vetTamTotalBer_[j];
+            vetTamTotalBer_[j] = auxTam;
+
+            auxId = vetIdBerOrdTamTotal_[i];
+            vetIdBerOrdTamTotal_[i] = vetIdBerOrdTamTotal_[j];
+            vetIdBerOrdTamTotal_[j] = auxId;
+         }
+      }
+   }
 }
