@@ -37,6 +37,7 @@ int main()
 
    
    // TESTE UNICO DE INSTANCIA
+   srand(time(NULL));
    testaVNS(1, 6);
 
 
@@ -665,7 +666,7 @@ void testaVNS(int Inst, int Vez){
    double ITmaxTempo = 120;//Segundos
    int qtd = -1;
    int qViz = 3;
-   // VNS(s, ITmaxTempo, qViz, qtd);
+   VNS(s, ITmaxTempo, qViz, qtd);
    calc_fo(s);
    h = clock() - h; 
    tempo = (double)h/CLOCKS_PER_SEC;

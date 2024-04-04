@@ -5,7 +5,7 @@ pio.renderers.default='browser'
 
 inst_id = 1
 inst_vez = 6
-inst_fo = 3137
+inst_fo = 1775
 
 # LINUX
 # arq_instancia = '..//instancias/inst' + str(inst_id) + '.txt'
