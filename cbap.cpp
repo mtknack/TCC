@@ -916,6 +916,7 @@ void criar_solucao_por_tamanho(Solucao &s)
    for (int i = 0; i < numNav_; i++)
    {
       nav = vetIndNavOrd_[i];
+      ber = verifica_menor_tempo_atendimento_nav(ber, nav);
       if (matTemAte_[vetIdBerOrdTamTotal_[ber]][nav] == 0)
       {
          aux = 0;
@@ -996,4 +997,24 @@ void ordernar_berco_asc(){
          }
       }
    }
+}
+
+int verifica_menor_tempo_atendimento_nav(int ber, int nav){
+   int berOrdenado[MAX_BER];
+   int berMenorTempo = (vetIdBerOrdTamTotal_[ber] - vetTamNav_[nav]) * matTemAte_[ber][nav], berFinal = ber;
+   for (int i = 0; i < numBer_; i++){
+      if(matTemAte_[vetIdBerOrdTamTotal_[ber]][nav] == 0 && berMenorTempo >= (vetIdBerOrdTamTotal_[i]  - vetTamNav_[nav]) * matTemAte_[i][nav]){
+         berFinal = i; 
+         berMenorTempo = (vetIdBerOrdTamTotal_[i]  - vetTamNav_[nav]) * matTemAte_[i][nav];
+      }
+
+      
+
+      for (int i = 0; i < numBer_; i++){
+         
+      }
+      
+   }
+
+   return berFinal;
 }
