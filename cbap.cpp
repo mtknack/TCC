@@ -1000,7 +1000,9 @@ void ordernar_berco_asc(){
 }
 
 int verifica_menor_tempo_atendimento_nav(int ber, int nav){
-   int berOrdenado[MAX_BER];
+
+   // calcular a area que cada navia vai ocupar
+
    int berMenorTempo = (vetIdBerOrdTamTotal_[ber] - vetTamNav_[nav]) * matTemAte_[ber][nav], berFinal = ber;
    for (int i = 0; i < numBer_; i++){
       if(matTemAte_[vetIdBerOrdTamTotal_[ber]][nav] == 0 && berMenorTempo >= (vetIdBerOrdTamTotal_[i]  - vetTamNav_[nav]) * matTemAte_[i][nav]){
@@ -1008,12 +1010,9 @@ int verifica_menor_tempo_atendimento_nav(int ber, int nav){
          berMenorTempo = (vetIdBerOrdTamTotal_[i]  - vetTamNav_[nav]) * matTemAte_[i][nav];
       }
 
-      
-
-      for (int i = 0; i < numBer_; i++){
+      for (int j = i; j < 0; j++){
          
       }
-      
    }
 
    return berFinal;

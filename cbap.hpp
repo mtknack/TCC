@@ -25,6 +25,13 @@ typedef struct tSolucao {
    int maiorQtdNavBer;
 }Solucao;
 
+typedef struct tTemAteBerco
+{
+   int matTemAteNavBer_[MAX_BER][MAX_NAV];
+   int vetIdBerTempAteNavioOrd_[MAX_BER][MAX_NAV];
+} temAteBercoo;
+
+
 // ------------ Dados de entrada
 int numBer_;                      // n�mero de ber�os dispon�veis
 int numNav_;                      // n�mero de navios a serem atendidos
