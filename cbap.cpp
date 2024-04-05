@@ -1001,7 +1001,9 @@ void ordernar_berco_asc(){
 
 int verifica_menor_tempo_atendimento_nav(int ber, int nav){
 
-   // calcular a area que cada navia vai ocupar
+   // calcular a area que cada navio vai ocupar em cada berco antes de comecar a construtiva
+   // depois como os navios vão estar ordenados, é só ver quais dos berços o navio se aloca melhor ocupando a menor area (já que a largura e fixa e oque muda é a altura)
+   // com, isso é só ir colocando na solução e aleatorizando a escolha de qual berço vai ser escolhido
 
    int berMenorTempo = (vetIdBerOrdTamTotal_[ber] - vetTamNav_[nav]) * matTemAte_[ber][nav], berFinal = ber;
    for (int i = 0; i < numBer_; i++){

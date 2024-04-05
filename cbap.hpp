@@ -27,8 +27,8 @@ typedef struct tSolucao {
 
 typedef struct tTemAteBerco
 {
-   int matTemAteNavBer_[MAX_BER][MAX_NAV];
-   int vetIdBerTempAteNavioOrd_[MAX_BER][MAX_NAV];
+   int matAreaTemAteNavBer_[MAX_BER][MAX_NAV];
+   int vetIdBerTempAteNavOrd_[MAX_BER][MAX_NAV];
 } temAteBercoo;
 
 
