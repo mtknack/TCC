@@ -37,7 +37,7 @@ int main()
 
    
    // TESTE UNICO DE INSTANCIA
-   testaVNS(1, 6);
+   testaVNS(4, 6);
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -916,8 +916,8 @@ void criar_solucao_por_tamanho(Solucao &s)
    for (int i = 0; i < numNav_; i++)
    {
       nav = vetIndNavOrd_[i];
-      ber = verifica_menor_tempo_atendimento_nav(ber, nav);
-      if (matTemAte_[vetIdBerOrdTamTotal_[ber]][nav] == 0)
+      ber = verifica_menor_tempo_atendimento_nav(nav);
+      if (matTemAte_[ber][nav] == 0)
       {
          aux = 0;
          while (matTemAte_[aux][nav] == 0)
@@ -925,12 +925,14 @@ void criar_solucao_por_tamanho(Solucao &s)
          s.matSol[aux][s.vetQtdNavBer[aux]] = nav;
          s.vetIdBerNav[nav] = aux;
          s.vetQtdNavBer[aux]++;
+         vetTemAtualBer_[ber] = vetTemAtualBer_[ber] + matTemAte_[ber][nav];
       }
       else
       {
-         s.matSol[vetIdBerOrdTamTotal_[ber]][s.vetQtdNavBer[vetIdBerOrdTamTotal_[ber]]] = nav;
-         s.vetIdBerNav[nav] = vetIdBerOrdTamTotal_[ber];
-         s.vetQtdNavBer[vetIdBerOrdTamTotal_[ber]]++;
+         s.matSol[ber][s.vetQtdNavBer[ber]] = nav;
+         s.vetIdBerNav[nav] = ber;
+         s.vetQtdNavBer[ber]++;
+         vetTemAtualBer_[ber] = vetTemAtualBer_[ber] + matTemAte_[ber][nav];
          ber++;
          if (ber == numBer_)
             ber = 0;
@@ -955,31 +957,11 @@ void descobre_tam_total_dos_bercos(){
       }
 
       vetIdBerOrdTamTotal_[i] = i; // somente para preencher o vetor com os ids
+      vetTemAtualBer_[i] = vetHorAbeBer_[i]; // alocando o vetor com a hora de abertura do berço
    }
 
-   for (int i = 0; i < numBer_; i++)
-   {
-      printf("%d - ", vetTamTotalBer_[i]);
-   }
-   printf("\n");
-   for (int i = 0; i < numBer_; i++)
-   {
-      printf("%d - ", vetIdBerOrdTamTotal_[i]);
-   }
-
-   printf("\n");
+  
    ordernar_berco_asc();
-
-   for (int i = 0; i < numBer_; i++)
-   {
-      printf("%d - ", vetTamTotalBer_[i]);
-   }
-   printf("\n");
-   for (int i = 0; i < numBer_; i++)
-   {
-      printf("%d - ", vetIdBerOrdTamTotal_[i]);
-   }
-   
 }
 
 void ordernar_berco_asc(){
@@ -999,23 +981,57 @@ void ordernar_berco_asc(){
    }
 }
 
-int verifica_menor_tempo_atendimento_nav(int ber, int nav){
+int verifica_menor_tempo_atendimento_nav(int nav){
 
    // calcular a area que cada navio vai ocupar em cada berco antes de comecar a construtiva
    // depois como os navios vão estar ordenados, é só ver quais dos berços o navio se aloca melhor ocupando a menor area (já que a largura e fixa e oque muda é a altura)
    // com, isso é só ir colocando na solução e aleatorizando a escolha de qual berço vai ser escolhido
 
-   int berMenorTempo = (vetIdBerOrdTamTotal_[ber] - vetTamNav_[nav]) * matTemAte_[ber][nav], berFinal = ber;
+   int vetTempoAlocacao_[MAX_BER];
+   int vetSobraEspacoBer_[MAX_BER];
+   int melhorBer = 0;
+   int melhorTemp;
+   int menorTam;
+   bool Alocado = false;
+   
    for (int i = 0; i < numBer_; i++){
-      if(matTemAte_[vetIdBerOrdTamTotal_[ber]][nav] == 0 && berMenorTempo >= (vetIdBerOrdTamTotal_[i]  - vetTamNav_[nav]) * matTemAte_[i][nav]){
-         berFinal = i; 
-         berMenorTempo = (vetIdBerOrdTamTotal_[i]  - vetTamNav_[nav]) * matTemAte_[i][nav];
-      }
+      vetTempoAlocacao_[i] = -1;
+      vetSobraEspacoBer_[i] = -1;
 
-      for (int j = i; j < 0; j++){
-         
+      if(matTemAte_[i][nav] != 0){
+         vetTempoAlocacao_[i] = vetTemAtualBer_[i] + matTemAte_[i][nav];
+         vetSobraEspacoBer_[i] = vetTamTotalBer_[i] - vetTamNav_[nav];
+
+         if(Alocado == false){
+            menorTam = vetSobraEspacoBer_[i];
+            melhorTemp = vetTempoAlocacao_[i];
+            Alocado = true;
+         }
+
+         if (
+            Alocado == true &&
+            vetSobraEspacoBer_[i] < menorTam
+            || vetTempoAlocacao_[i] < melhorTemp
+         ){
+            menorTam = vetSobraEspacoBer_[i];
+            melhorTemp = vetTempoAlocacao_[i];
+            melhorBer = i;
+         }
       }
    }
 
-   return berFinal;
+   for (int i = 1; i < numBer_; i++){
+      printf("%d \n", vetTempoAlocacao_[i]);
+      if(
+         (vetTempoAlocacao_[i] != -1 && vetSobraEspacoBer_[i] != -1) &&
+         vetSobraEspacoBer_[i] <  menorTam // O || é melhor que &&
+         || vetTempoAlocacao_[i] < melhorTemp
+      ){
+         menorTam = vetSobraEspacoBer_[i];
+         melhorTemp = vetTempoAlocacao_[i];
+         melhorBer = i;
+      }
+   }
+
+   return melhorBer;
 }

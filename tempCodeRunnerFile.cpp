@@ -1,0 +1,1 @@
+int verifica_menor_tempo_atendimento_nav(int ber, int nav)
