@@ -37,6 +37,7 @@ int main()
 
    
    // TESTE UNICO DE INSTANCIA
+   srand(time(NULL));
    testaVNS(4, 6);
 
 
@@ -665,7 +666,7 @@ void testaVNS(int Inst, int Vez){
    double ITmaxTempo = 120;//Segundos
    int qtd = -1;
    int qViz = 3;
-   // VNS(s, ITmaxTempo, qViz, qtd);
+   VNS(s, ITmaxTempo, qViz, qtd);
    calc_fo(s);
    h = clock() - h; 
    tempo = (double)h/CLOCKS_PER_SEC;
@@ -989,7 +990,7 @@ int verifica_menor_tempo_atendimento_nav(int nav){
 
    int vetTempoAlocacao_[MAX_BER];
    int vetSobraEspacoBer_[MAX_BER];
-   int melhorBer = 0;
+   int melhorBer = 0, melhorBer2 = 0;
    int melhorTemp;
    int menorTam;
    bool Alocado = false;
@@ -1015,13 +1016,13 @@ int verifica_menor_tempo_atendimento_nav(int nav){
          ){
             menorTam = vetSobraEspacoBer_[i];
             melhorTemp = vetTempoAlocacao_[i];
+            melhorBer2 = melhorBer;
             melhorBer = i;
          }
       }
    }
 
    for (int i = 1; i < numBer_; i++){
-      printf("%d \n", vetTempoAlocacao_[i]);
       if(
          (vetTempoAlocacao_[i] != -1 && vetSobraEspacoBer_[i] != -1) &&
          vetSobraEspacoBer_[i] <  menorTam // O || é melhor que &&
@@ -1029,9 +1030,19 @@ int verifica_menor_tempo_atendimento_nav(int nav){
       ){
          menorTam = vetSobraEspacoBer_[i];
          melhorTemp = vetTempoAlocacao_[i];
+         melhorBer2 = melhorBer;
          melhorBer = i;
       }
    }
 
-   return melhorBer;
+   int porcentagem;
+   porcentagem = rand() % 100;
+
+   // printf("%d \n", porcentagem);
+   if(porcentagem >= 50){
+      return melhorBer2;
+   }
+   else{
+      return melhorBer;
+   }
 }
