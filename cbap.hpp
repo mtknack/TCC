@@ -11,6 +11,7 @@ typedef struct tSolucao {
    int vetPosFinNav[MAX_NAV];
    int vetHorAtrNav[MAX_NAV];
    int vetHorSaiNav[MAX_NAV];
+   int vetHorAlocProxNav[MAX_BER]; // tempo de alocação para o proximo navio
    //---
    int vioHorMaxNav;
    int vioHorFecBer;
@@ -43,7 +44,7 @@ int vetPosIniBer_[MAX_BER];
 int vetPosFinBer_[MAX_BER];
 int vetTamTotalBer_[MAX_BER]; // tamanho total que x berco pode ocupar
 int vetIdBerOrdTamTotal_[MAX_BER]; // id do berco ordenado pelo seu tamanho crescente
-int vetDisponivelBerco_[MAX_BER]; // indica se o berco na linha atual está disponivel para alocar um navio
+int vetTempAtualBer_[MAX_BER]; // tempo atual de atendimento do berco
 
 
 //********************************* M�TODOS **********************************
@@ -63,6 +64,7 @@ void ler_instancia(char *arq);
 void criar_solucao_por_tamanho(Solucao &s);
 void descobre_tam_total_dos_bercos();
 void ordernar_berco_asc();
+void inicializar_hor_pos_navios_2(Solucao &s);
 
 // novo
 void testaVNS(int Inst, int Vez);

@@ -299,6 +299,7 @@ void inicializar_hor_pos_navios(Solucao &s)
             //--- Definir as posi��es
             s.vetPosAtrNav[n1] = vetPosIniBer_[i];
             s.vetPosFinNav[n1] = s.vetPosAtrNav[n1] + vetTamNav_[n1];
+            s.vetHorAlocProxNav[i] = s.vetHorSaiNav[n1];
             if (i != 0)
             {
                sob_esq = true;
@@ -935,13 +936,13 @@ void criar_solucao_por_tamanho(Solucao &s)
          if (ber == numBer_)
             ber = 0;
       }
+      inicializar_hor_pos_navios(s);
    }
    for (int i = 0; i < numBer_; i++)
       if(s.vetQtdNavBer[i] >= s.maiorQtdNavBer)
          s.maiorQtdNavBer = s.vetQtdNavBer[i];
 
    
-   inicializar_hor_pos_navios(s);
 }
 
 void descobre_tam_total_dos_bercos(){
@@ -957,28 +958,28 @@ void descobre_tam_total_dos_bercos(){
       vetIdBerOrdTamTotal_[i] = i; // somente para preencher o vetor com os ids
    }
 
-   for (int i = 0; i < numBer_; i++)
-   {
-      printf("%d - ", vetTamTotalBer_[i]);
-   }
-   printf("\n");
-   for (int i = 0; i < numBer_; i++)
-   {
-      printf("%d - ", vetIdBerOrdTamTotal_[i]);
-   }
+   // for (int i = 0; i < numBer_; i++)
+   // {
+   //    printf("%d - ", vetTamTotalBer_[i]);
+   // }
+   // printf("\n");
+   // for (int i = 0; i < numBer_; i++)
+   // {
+   //    printf("%d - ", vetIdBerOrdTamTotal_[i]);
+   // }
 
-   printf("\n");
-   ordernar_berco_asc();
+   // printf("\n");
+   // ordernar_berco_asc();
 
-   for (int i = 0; i < numBer_; i++)
-   {
-      printf("%d - ", vetTamTotalBer_[i]);
-   }
-   printf("\n");
-   for (int i = 0; i < numBer_; i++)
-   {
-      printf("%d - ", vetIdBerOrdTamTotal_[i]);
-   }
+   // for (int i = 0; i < numBer_; i++)
+   // {
+   //    printf("%d - ", vetTamTotalBer_[i]);
+   // }
+   // printf("\n");
+   // for (int i = 0; i < numBer_; i++)
+   // {
+   //    printf("%d - ", vetIdBerOrdTamTotal_[i]);
+   // }
    
 }
 
@@ -997,4 +998,11 @@ void ordernar_berco_asc(){
          }
       }
    }
+}
+
+void verificaMenorTempoBer(Solucao &s){
+   for(int i = 0; i < numBer_; i++){
+      s.vetHorSaiNav
+   }
+   
 }
