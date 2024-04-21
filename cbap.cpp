@@ -1003,6 +1003,7 @@ void ordernar_berco_asc(){
 void verificaMenorTempoBer(Solucao &s){
    for(int i = 0; i < numBer_; i++){
       s.vetHorSaiNav
+      
    }
    
 }
