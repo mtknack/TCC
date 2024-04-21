@@ -299,7 +299,6 @@ void inicializar_hor_pos_navios(Solucao &s)
             //--- Definir as posi��es
             s.vetPosAtrNav[n1] = vetPosIniBer_[i];
             s.vetPosFinNav[n1] = s.vetPosAtrNav[n1] + vetTamNav_[n1];
-            s.vetHorAlocProxNav[i] = s.vetHorSaiNav[n1];
             if (i != 0)
             {
                sob_esq = true;
@@ -333,6 +332,7 @@ void inicializar_hor_pos_navios(Solucao &s)
                }
             }
             hor_atual = s.vetHorSaiNav[n1];
+            s.vetHorAlocProxNav[i] = s.vetHorSaiNav[n1];
          }
       }
 }
@@ -909,16 +909,15 @@ void gerarViz4(Solucao &S){ //Troca somente um navio de berco aleatório varias 
 
 void criar_solucao_por_tamanho(Solucao &s)
 {
-   int nav, ber, aux;
+   int nav,  aux;
    memset(&s.vetQtdNavBer, 0, sizeof(s.vetQtdNavBer));
    memset(&s.matSol, -1, sizeof(s.matSol));
 
-   ber = 0;
    s.maiorQtdNavBer = 0;
    for (int i = 0; i < numNav_; i++)
    {
       nav = vetIndNavOrd_[i];
-      if (matTemAte_[vetIdBerOrdTamTotal_[ber]][nav] == 0)
+      if (matTemAte_[ber][nav] == 0)
       {
          aux = 0;
          while (matTemAte_[aux][nav] == 0)
@@ -929,9 +928,9 @@ void criar_solucao_por_tamanho(Solucao &s)
       }
       else
       {
-         s.matSol[vetIdBerOrdTamTotal_[ber]][s.vetQtdNavBer[vetIdBerOrdTamTotal_[ber]]] = nav;
-         s.vetIdBerNav[nav] = vetIdBerOrdTamTotal_[ber];
-         s.vetQtdNavBer[vetIdBerOrdTamTotal_[ber]]++;
+         s.matSol[ber][s.vetQtdNavBer[ber]] = nav;
+         s.vetIdBerNav[nav] = ber;
+         s.vetQtdNavBer[ber]++;
          ber++;
          if (ber == numBer_)
             ber = 0;
@@ -956,6 +955,7 @@ void descobre_tam_total_dos_bercos(){
       }
 
       vetIdBerOrdTamTotal_[i] = i; // somente para preencher o vetor com os ids
+      vetIdBercoMelhorTemp_[i] = i; // somente para preencher o vetor com os ids
    }
 
    // for (int i = 0; i < numBer_; i++)
@@ -1000,10 +1000,39 @@ void ordernar_berco_asc(){
    }
 }
 
-void verificaMenorTempoBer(Solucao &s){
-   for(int i = 0; i < numBer_; i++){
-      s.vetHorSaiNav
-      
-   }
+int verificaMenorTempoBer(Solucao &s, int nav){
    
+   int auxId, auxTam, vetAuxTemp[MAX_BER], vetAuxIdBerco[MAX_BER];
+   memcpy(&vetAuxTemp, &s.vetHorAlocProxNav, sizeof(s.vetHorAlocProxNav));
+   memcpy(&vetAuxIdBerco, &vetIdBercoMelhorTemp_, sizeof(vetIdBercoMelhorTemp_));
+
+   for (int i = 0; i < (numBer_ - 1); i++){
+      for (int j = i; j < (numBer_); j++){
+
+         if(matTemAte_[i][nav] == 0){
+            auxId = vetAuxIdBerco[i];
+            vetAuxIdBerco[i] = vetAuxIdBerco[j];
+            vetAuxIdBerco[j] = auxId;
+
+            auxTam = vetAuxTemp[i];
+            vetAuxTemp[i] = vetAuxTemp[j];
+            vetAuxTemp[j] = auxTam;
+            // falta ver essa logica aqui
+         } 
+         else if(
+            matTemAte_[j][nav] != 0 &&
+            vetAuxTemp[i] + matTemAte_[i][nav] > vetAuxTemp[j] + matTemAte_[j][nav]
+         ){
+            auxId = vetAuxIdBerco[i];
+            vetAuxIdBerco[i] = vetAuxIdBerco[j];
+            vetAuxIdBerco[j] = auxId;
+
+            auxTam = vetAuxTemp[i];
+            vetAuxTemp[i] = vetAuxTemp[j];
+            vetAuxTemp[j] = auxTam;
+         }
+      }
+   }
+
+   return vetAuxIdBerco[rand() % (numBer_/2)];
 }

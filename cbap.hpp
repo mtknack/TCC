@@ -45,6 +45,7 @@ int vetPosFinBer_[MAX_BER];
 int vetTamTotalBer_[MAX_BER]; // tamanho total que x berco pode ocupar
 int vetIdBerOrdTamTotal_[MAX_BER]; // id do berco ordenado pelo seu tamanho crescente
 int vetTempAtualBer_[MAX_BER]; // tempo atual de atendimento do berco
+int vetIdBercoMelhorTemp_[MAX_BER]; // vetor com os ids do berco que com o barco atual ocupa o menor tempo
 
 
 //********************************* M�TODOS **********************************
@@ -65,6 +66,7 @@ void criar_solucao_por_tamanho(Solucao &s);
 void descobre_tam_total_dos_bercos();
 void ordernar_berco_asc();
 void inicializar_hor_pos_navios_2(Solucao &s);
+int verificaMenorTempoBer(Solucao &s, int nav);
 
 // novo
 void testaVNS(int Inst, int Vez);
