@@ -667,7 +667,7 @@ void testaVNS(int Inst, int Vez){
    double ITmaxTempo = 120;//Segundos
    int qtd = -1;
    int qViz = 3;
-   VNS(s, ITmaxTempo, qViz, qtd);
+   // VNS(s, ITmaxTempo, qViz, qtd);
    calc_fo(s);
    h = clock() - h; 
    tempo = (double)h/CLOCKS_PER_SEC;
@@ -909,7 +909,7 @@ void gerarViz4(Solucao &S){ //Troca somente um navio de berco aleatório varias 
 
 void criar_solucao_por_tamanho(Solucao &s)
 {
-   int nav,  aux;
+   int nav, ber, aux;
    memset(&s.vetQtdNavBer, 0, sizeof(s.vetQtdNavBer));
    memset(&s.matSol, -1, sizeof(s.matSol));
 
@@ -917,6 +917,8 @@ void criar_solucao_por_tamanho(Solucao &s)
    for (int i = 0; i < numNav_; i++)
    {
       nav = vetIndNavOrd_[i];
+      ber = verificaMenorTempoBer(s, nav);
+      printf("%d\n", ber);
       if (matTemAte_[ber][nav] == 0)
       {
          aux = 0;
@@ -1002,27 +1004,41 @@ void ordernar_berco_asc(){
 
 int verificaMenorTempoBer(Solucao &s, int nav){
    
+   int n = numBer_; // para não modificar o valor de numBer_
    int auxId, auxTam, vetAuxTemp[MAX_BER], vetAuxIdBerco[MAX_BER];
    memcpy(&vetAuxTemp, &s.vetHorAlocProxNav, sizeof(s.vetHorAlocProxNav));
    memcpy(&vetAuxIdBerco, &vetIdBercoMelhorTemp_, sizeof(vetIdBercoMelhorTemp_));
 
-   for (int i = 0; i < (numBer_ - 1); i++){
-      for (int j = i; j < (numBer_); j++){
+   for (int i = 0; i < (n - 1); i++){
+      for (int j = i; j < (n); j++){
 
          if(matTemAte_[i][nav] == 0){
-            auxId = vetAuxIdBerco[i];
-            vetAuxIdBerco[i] = vetAuxIdBerco[j];
-            vetAuxIdBerco[j] = auxId;
+            auxId = vetAuxIdBerco[n - 1];
+            vetAuxIdBerco[n - 1] = vetAuxIdBerco[i];
+            vetAuxIdBerco[i] = auxId;
 
-            auxTam = vetAuxTemp[i];
-            vetAuxTemp[i] = vetAuxTemp[j];
-            vetAuxTemp[j] = auxTam;
-            // falta ver essa logica aqui
-         } 
+            auxTam = vetAuxTemp[n - 1];
+            vetAuxTemp[n - 1] = vetAuxTemp[i];
+            vetAuxTemp[i] = auxTam;
+            n--;
+            i--;
+            break;
+         }
+         else if(matTemAte_[j][nav] == 0){
+            auxId = vetAuxIdBerco[n - 1];
+            vetAuxIdBerco[n - 1] = vetAuxIdBerco[i];
+            vetAuxIdBerco[i] = auxId;
+
+            auxTam = vetAuxTemp[n - 1];
+            vetAuxTemp[n - 1] = vetAuxTemp[i];
+            vetAuxTemp[i] = auxTam;
+            n--;
+            j--;
+         }
          else if(
-            matTemAte_[j][nav] != 0 &&
             vetAuxTemp[i] + matTemAte_[i][nav] > vetAuxTemp[j] + matTemAte_[j][nav]
          ){
+            printf("%d + %d > %d + %d\n", vetAuxTemp[i], matTemAte_[i][nav], vetAuxTemp[j], matTemAte_[j][nav]);
             auxId = vetAuxIdBerco[i];
             vetAuxIdBerco[i] = vetAuxIdBerco[j];
             vetAuxIdBerco[j] = auxId;
@@ -1031,8 +1047,15 @@ int verificaMenorTempoBer(Solucao &s, int nav){
             vetAuxTemp[i] = vetAuxTemp[j];
             vetAuxTemp[j] = auxTam;
          }
+
+         printf("%d %d %d\n", i, j, n);
       }
    }
 
+   for (int i = 0; i < numBer_; i++){
+      printf("%d - ", vetAuxIdBerco[i]);
+   }
+   printf("\n");
+   
    return vetAuxIdBerco[rand() % (numBer_/2)];
 }
