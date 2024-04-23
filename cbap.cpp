@@ -38,7 +38,7 @@ int main()
    
    // TESTE UNICO DE INSTANCIA
    srand(time(NULL));
-   testaVNS(4, 6);
+   testaVNS(1, 6);
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -664,10 +664,10 @@ void testaVNS(int Inst, int Vez){
    printf("Primeira FO = %d\n", s.funObj);
    printf("TempSer = %d\n", s.temSer);
 
-   double ITmaxTempo = 120;//Segundos
+   double ITmaxTempo = 500;//Segundos
    int qtd = -1;
    int qViz = 3;
-   // VNS(s, ITmaxTempo, qViz, qtd);
+   VNS(s, ITmaxTempo, qViz, qtd);
    calc_fo(s);
    h = clock() - h; 
    tempo = (double)h/CLOCKS_PER_SEC;
@@ -918,18 +918,25 @@ void criar_solucao_por_tamanho(Solucao &s)
    {
       nav = vetIndNavOrd_[i];
       ber = verificaMenorTempoBer(s, nav);
-      printf("ber escolhido - %d\n", ber);
+      // printf("ber escolhido - %d   matTemAte_[ber][nav] %d\n", ber, matTemAte_[ber][nav]);
+
+      // if(i == 3){
+      //    break;
+      // }
       if (matTemAte_[ber][nav] == 0)
       {
          aux = verificaMenorTempoBer(s, nav);
+         // int temp = 0;
          while (matTemAte_[aux][nav] == 0){
             aux = verificaMenorTempoBer(s, nav);
-            if(){
-               // ver bug em instancias grandes
-            
-            }
+            // temp++;
+            // if(temp == 3){
+            //    // ver bug em instancias grandes
+            //    break;
+            // }
          }
-            
+         
+         // printf("ber escolhido - %d   matTemAte_[ber][nav] %d\n", ber, matTemAte_[ber][nav]);
             
          s.matSol[aux][s.vetQtdNavBer[aux]] = nav;
          s.vetIdBerNav[nav] = aux;
@@ -944,6 +951,7 @@ void criar_solucao_por_tamanho(Solucao &s)
          // if (ber == numBer_)
          //    ber = 0;
       }
+
       inicializar_hor_pos_navios(s);
    }
    for (int i = 0; i < numBer_; i++)
@@ -1016,10 +1024,13 @@ int verificaMenorTempoBer(Solucao &s, int nav){
    memcpy(&vetAuxTemp, &s.vetHorAlocProxNav, sizeof(s.vetHorAlocProxNav));
    memcpy(&vetAuxIdBerco, &vetIdBercoMelhorTemp_, sizeof(vetIdBercoMelhorTemp_));
 
+   // printf("nav %d\n", nav);
+
    for (int i = 0; i < (n - 1); i++){
+      // printf("ber - %d   matTemAte_[ber][nav] %d\n i = %d j = %d vetAuxIdBerco[i] = %d\n", i, matTemAte_[vetAuxIdBerco[i]][nav]);
       for (int j = i; j < (n); j++){
 
-         if(matTemAte_[i][nav] == 0){
+         if(matTemAte_[vetAuxIdBerco[i]][nav] == 0){
             auxId = vetAuxIdBerco[n - 1];
             vetAuxIdBerco[n - 1] = vetAuxIdBerco[i];
             vetAuxIdBerco[i] = auxId;
@@ -1031,19 +1042,19 @@ int verificaMenorTempoBer(Solucao &s, int nav){
             i--;
             break;
          }
-         else if(matTemAte_[j][nav] == 0){
+         else if(matTemAte_[vetAuxIdBerco[j]][nav] == 0){
             auxId = vetAuxIdBerco[n - 1];
-            vetAuxIdBerco[n - 1] = vetAuxIdBerco[i];
-            vetAuxIdBerco[i] = auxId;
+            vetAuxIdBerco[n - 1] = vetAuxIdBerco[j];
+            vetAuxIdBerco[j] = auxId;
 
             auxTam = vetAuxTemp[n - 1];
-            vetAuxTemp[n - 1] = vetAuxTemp[i];
-            vetAuxTemp[i] = auxTam;
+            vetAuxTemp[n - 1] = vetAuxTemp[j];
+            vetAuxTemp[j] = auxTam;
             n--;
             j--;
          }
          else if(
-            vetAuxTemp[i] + matTemAte_[i][nav] > vetAuxTemp[j] + matTemAte_[j][nav]
+            vetAuxTemp[i] + matTemAte_[vetAuxIdBerco[i]][nav] > vetAuxTemp[j] + matTemAte_[vetAuxIdBerco[j]][nav]
          ){
             // printf("%d + %d > %d + %d\n", vetAuxTemp[i], matTemAte_[i][nav], vetAuxTemp[j], matTemAte_[j][nav]);
             auxId = vetAuxIdBerco[i];
@@ -1059,11 +1070,11 @@ int verificaMenorTempoBer(Solucao &s, int nav){
       }
    }
 
-   for (int i = 0; i < numBer_; i++){
-      printf("%d - ", vetAuxIdBerco[i]);
-   }
-   printf("\n");
+   // for (int i = 0; i < numBer_; i++){
+   //    printf("%d - ", vetAuxIdBerco[i]);
+   // }
+   // printf("\n");
    
-   // return vetAuxIdBerco[ rand() % (numBer_/2 + 1)];
-   return vetAuxIdBerco[0];
+   return vetAuxIdBerco[ rand() % (numBer_/2 + 1)];
+   // return vetAuxIdBerco[0];
 }
