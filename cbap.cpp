@@ -38,7 +38,7 @@ int main()
    
    // TESTE UNICO DE INSTANCIA
    srand(time(NULL));
-   testaVNS(1, 6);
+   testaVNS(4, 6);
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -918,12 +918,19 @@ void criar_solucao_por_tamanho(Solucao &s)
    {
       nav = vetIndNavOrd_[i];
       ber = verificaMenorTempoBer(s, nav);
-      printf("%d\n", ber);
+      printf("ber escolhido - %d\n", ber);
       if (matTemAte_[ber][nav] == 0)
       {
-         aux = 0;
-         while (matTemAte_[aux][nav] == 0)
-            aux++;
+         aux = verificaMenorTempoBer(s, nav);
+         while (matTemAte_[aux][nav] == 0){
+            aux = verificaMenorTempoBer(s, nav);
+            if(){
+               // ver bug em instancias grandes
+            
+            }
+         }
+            
+            
          s.matSol[aux][s.vetQtdNavBer[aux]] = nav;
          s.vetIdBerNav[nav] = aux;
          s.vetQtdNavBer[aux]++;
@@ -933,9 +940,9 @@ void criar_solucao_por_tamanho(Solucao &s)
          s.matSol[ber][s.vetQtdNavBer[ber]] = nav;
          s.vetIdBerNav[nav] = ber;
          s.vetQtdNavBer[ber]++;
-         ber++;
-         if (ber == numBer_)
-            ber = 0;
+         // ber++;
+         // if (ber == numBer_)
+         //    ber = 0;
       }
       inicializar_hor_pos_navios(s);
    }
@@ -1038,7 +1045,7 @@ int verificaMenorTempoBer(Solucao &s, int nav){
          else if(
             vetAuxTemp[i] + matTemAte_[i][nav] > vetAuxTemp[j] + matTemAte_[j][nav]
          ){
-            printf("%d + %d > %d + %d\n", vetAuxTemp[i], matTemAte_[i][nav], vetAuxTemp[j], matTemAte_[j][nav]);
+            // printf("%d + %d > %d + %d\n", vetAuxTemp[i], matTemAte_[i][nav], vetAuxTemp[j], matTemAte_[j][nav]);
             auxId = vetAuxIdBerco[i];
             vetAuxIdBerco[i] = vetAuxIdBerco[j];
             vetAuxIdBerco[j] = auxId;
@@ -1048,7 +1055,7 @@ int verificaMenorTempoBer(Solucao &s, int nav){
             vetAuxTemp[j] = auxTam;
          }
 
-         printf("%d %d %d\n", i, j, n);
+         // printf("%d %d %d\n", i, j, n);
       }
    }
 
@@ -1057,5 +1064,6 @@ int verificaMenorTempoBer(Solucao &s, int nav){
    }
    printf("\n");
    
-   return vetAuxIdBerco[rand() % (numBer_/2)];
+   // return vetAuxIdBerco[ rand() % (numBer_/2 + 1)];
+   return vetAuxIdBerco[0];
 }
