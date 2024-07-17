@@ -67,6 +67,8 @@ void descobre_tam_total_dos_bercos();
 void ordernar_berco_asc();
 void inicializar_hor_pos_navios_2(Solucao &s);
 int verificaMenorTempoBer(Solucao &s, int nav);
+void merge(int arr[], int aux[], int left, int middle, int right);
+void mergeSort(int arr[], int aux[], int left, int right);
 
 // novo
 void testaVNS(int Inst, int Vez);

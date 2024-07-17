@@ -664,10 +664,10 @@ void testaVNS(int Inst, int Vez){
    printf("Primeira FO = %d\n", s.funObj);
    printf("TempSer = %d\n", s.temSer);
 
-   double ITmaxTempo = 500;//Segundos
+   double ITmaxTempo = 240;//Segundos
    int qtd = -1;
    int qViz = 3;
-   VNS(s, ITmaxTempo, qViz, qtd);
+   VNS(s, ITmaxTempo, qViz, qtd); 
    calc_fo(s);
    h = clock() - h; 
    tempo = (double)h/CLOCKS_PER_SEC;
@@ -1075,6 +1075,75 @@ int verificaMenorTempoBer(Solucao &s, int nav){
    // }
    // printf("\n");
    
-   return vetAuxIdBerco[ rand() % (numBer_/2 + 1)];
+   return vetAuxIdBerco[ rand() % (numBer_/4 + 1)];
    // return vetAuxIdBerco[0];
+}
+
+// Função para mesclar dois subvetores de vetAuxTemp e vetAuxIdBerco[]
+void merge(int arr[], int aux[], int left, int middle, int right) {
+    int i, j, k;
+    int n1 = middle - left + 1;
+    int n2 = right - middle;
+
+    // Cria vetores temporários
+    int L[n1], R[n2];
+    int L_id[n1], R_id[n2];
+
+    // Copia os dados para os vetores temporários L[] e R[]
+    for (i = 0; i < n1; i++) {
+        L[i] = arr[left + i];
+        L_id[i] = aux[left + i];
+    }
+    for (j = 0; j < n2; j++) {
+        R[j] = arr[middle + 1 + j];
+        R_id[j] = aux[middle + 1 + j];
+    }
+
+    // Mescla os vetores temporários de volta para arr[]
+    i = 0;
+    j = 0;
+    k = left;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            aux[k] = L_id[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            aux[k] = R_id[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copia os elementos restantes de L[], se houver algum
+    while (i < n1) {
+        arr[k] = L[i];
+        aux[k] = L_id[i];
+        i++;
+        k++;
+    }
+
+    // Copia os elementos restantes de R[], se houver algum
+    while (j < n2) {
+        arr[k] = R[j];
+        aux[k] = R_id[j];
+        j++;
+        k++;
+    }
+}
+
+// Função principal do Merge Sort
+void mergeSort(int arr[], int aux[], int left, int right) {
+    if (left < right) {
+        // Encontra o ponto médio
+        int middle = left + (right - left) / 2;
+
+        // Ordena a primeira e a segunda metades
+        mergeSort(arr, aux, left, middle);
+        mergeSort(arr, aux, middle + 1, right);
+
+        // Mescla as duas metades ordenadas
+        merge(arr, aux, left, middle, right);
+    }
 }
