@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
 
 #include "cbap.hpp"
 
@@ -37,8 +38,9 @@ int main()
 
    
    // TESTE UNICO DE INSTANCIA
-   srand(time(NULL));
-   testaVNS(1, 6);
+   // srand(time(NULL));
+   // testaVNS(1, 6);
+   iniciaGrasp(3, 6);
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -349,9 +351,11 @@ bool  navios_sobrepostos(Solucao &s, const int &n1, const int &n2)
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-void verificar_solucao(Solucao &s)
+void verificar_solucao(Solucao &s, bool indicador)
 {
-   printf("\n\n>>> VERIFICACAO DA SOLUCAO <<<\n");
+   if(indicador){
+      printf("\n\n>>> VERIFICACAO DA SOLUCAO <<<\n");
+   }
    bool viavel = true;
    //--- Verificar se todos os navios foram atendidos uma �nica vez
    int aux, vetAux[MAX_NAV];
@@ -440,13 +444,14 @@ void verificar_solucao(Solucao &s)
             }
    //-------------------------
    FIM : ;
-   if (viavel)
-      printf("\n>>> SOLUCAO VIAVEL!\n");
-   else{
-      printf("\n>>> SOLUCAO INVIAVEL!\n");
-      //s.funObj += 10000;
-   }
-      
+   if(indicador){
+      if (viavel)
+         printf("\n>>> SOLUCAO VIAVEL!\n");
+      else{
+         printf("\n>>> SOLUCAO INVIAVEL!\n");
+         //s.funObj += 10000;
+      }
+   } 
 }
 //------------------------------------------------------------------------------
 
@@ -664,14 +669,14 @@ void testaVNS(int Inst, int Vez){
    printf("Primeira FO = %d\n", s.funObj);
    printf("TempSer = %d\n", s.temSer);
 
-   double ITmaxTempo = 240;//Segundos
+   double ITmaxTempo = 60;//Segundos
    int qtd = -1;
    int qViz = 3;
    VNS(s, ITmaxTempo, qViz, qtd); 
    calc_fo(s);
    h = clock() - h; 
    tempo = (double)h/CLOCKS_PER_SEC;
-   verificar_solucao(s);
+   verificar_solucao(s, false);
    printf("MelFO = %d\n", s.funObj);
    printf("TempSer = %d\n", s.temSer);
    printf("Tempo = %lf\n", tempo);
@@ -694,7 +699,7 @@ void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd){
    int i=1,k;
    
    clonar_solucao(S,S1);
-   
+   printarDadosSolucao(S1);
    while(tempExec <= ITmaxTempo || i <= qtd){
       h = clock();
       ++i;
@@ -741,8 +746,27 @@ void gerarViz1(Solucao &S,bool att){
 	while(teste){
       ber1 = rand()%(numBer_);
 		ber2 = rand()%(numBer_);
-		camada1 = (rand()%(S.vetQtdNavBer[ber1]));
-		camada2 = (rand()%(S.vetQtdNavBer[ber2]));
+
+      if(S.vetQtdNavBer[ber1] > 0){
+         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+      }
+      else{
+         while (S.vetQtdNavBer[ber1] == 0){
+            ber1 = rand()%(numBer_);
+         }
+         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+      }
+
+		if(S.vetQtdNavBer[ber2] > 0){
+         camada2 = (rand()%(S.vetQtdNavBer[ber2]));
+      }
+      else{
+         while (S.vetQtdNavBer[ber2] == 0){
+            ber2 = rand()%(numBer_);
+         }
+         camada2 = (rand()%(S.vetQtdNavBer[ber2]));
+      }
+		
 
       nav1 = S.matSol[ber1][camada1];
       nav2 = S.matSol[ber2][camada2];
@@ -778,7 +802,18 @@ void gerarViz2(Solucao &S){ //Troca somente um navio de berco aleatório
 
 	while(teste){
       ber1 = rand()%(numBer_);
-		camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+
+      if(S.vetQtdNavBer[ber1] > 0){
+         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+      }
+      else{
+         while (S.vetQtdNavBer[ber1] == 0){
+            ber1 = rand()%(numBer_);
+         }
+         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+      }
+
+		
       nav1 = S.matSol[ber1][camada1];
 
 		ber2 = rand()%(numBer_); //berco destino
@@ -1146,4 +1181,136 @@ void mergeSort(int arr[], int aux[], int left, int right) {
         // Mescla as duas metades ordenadas
         merge(arr, aux, left, middle, right);
     }
+}
+
+void grasp(Solucao &s, int maxIter, float alpha){
+
+   Solucao Sa, Si;
+   srand(time(NULL));
+   int melhor = 1000000;
+   double ITmaxTempo = 120;//Segundos
+   int qtd = -1;
+   int qViz = 3;
+
+   for (int i = 0; i < maxIter; i++)
+   {
+      criar_solucao_por_tamanho(Si);
+      calc_fo(Si);
+      printf("Entrei no VNS %d\n", i); 
+      VNS(Si, ITmaxTempo, qViz, qtd);
+      printf("Travei antes no VNS %d\n", i); 
+      verificar_solucao(Si, false);
+
+
+      if(Si.funObj < melhor){
+         printf("Melhor: %d\n", Si.funObj);
+         clonar_solucao(Si, Sa);
+         melhor = Sa.funObj;
+      }
+      else{
+         printf("Nao melhor: %d\n", Si.funObj);
+         memset(&Si, 0, sizeof(Solucao));
+      }
+   }
+
+   clonar_solucao(Sa, s);
+}
+
+void iniciaGrasp(int Inst, int Vez){
+
+   Solucao s;
+   int maxIter = 10;
+   float alpha = 1;
+   char arq[50];
+   sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
+   ler_instancia(arq);
+
+   // metodos auxiliares
+   ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
+   atualizar_dimensoes_bercos();
+   descobre_tam_total_dos_bercos();
+
+   // chamando o metodo
+   printf("Iniciando grasp\n");
+   grasp(s, maxIter, alpha);
+   printf("MelFO = %d\n", s.funObj);
+   printf("TempSer = %d\n", s.temSer);
+
+   // imprimindo solução
+   for (int j = 0; j < numBer_; j++){
+      for (int i = 0; i < s.maiorQtdNavBer; i++){
+         printf("%d - ", s.matSol[j][i]);
+      }
+      printf("\n");
+   }
+  
+   sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, s.funObj);
+   escrever_solucao(s, arq);
+}
+
+void printarDadosSolucao(Solucao &s){
+   printf("\n\n\n\n");
+
+   printf("vioHorMaxNav: %d \n", s.vioHorMaxNav);
+   printf("vioHorFecBer: %d \n", s.vioHorFecBer);
+   printf("temSer: %d \n", s.temSer);
+   printf("funObj: %d \n", s.funObj);
+   printf("maiorQtdNavBer: %d \n", s.maiorQtdNavBer);
+
+   printf("vetIdBerNav\n");
+   for (int j = 0; j < numNav_; j++){
+      printf("%d - ", s.vetIdBerNav[j]);
+   }
+   printf("\n\n\n");
+
+   printf("vetIdBerNav\n");
+   for (int j = 0; j < numNav_; j++){
+      printf("%d - ", s.vetIdBerNav[j]);
+   }
+   printf("\n\n\n");
+
+   printf("vetPosAtrNav\n");
+   for (int j = 0; j < numNav_; j++){
+      printf("%d - ", s.vetPosAtrNav[j]);
+   }
+   printf("\n\n\n");
+
+   printf("vetPosFinNav\n");
+   for (int j = 0; j < numNav_; j++){
+      printf("%d - ", s.vetPosFinNav[j]);
+   }
+   printf("\n\n\n");
+
+   printf("vetHorAtrNav\n");
+   for (int j = 0; j < numNav_; j++){
+      printf("%d - ", s.vetHorAtrNav[j]);
+   }
+   printf("\n\n\n");
+
+   printf("vetHorSaiNav\n");
+   for (int j = 0; j < numNav_; j++){
+      printf("%d - ", s.vetHorSaiNav[j]);
+   }
+   printf("\n\n\n");
+
+   printf("vetHorAlocProxNav\n");
+   for (int j = 0; j < numBer_; j++){
+      printf("%d - ", s.vetHorAlocProxNav[j]);
+   }
+   printf("\n\n\n");
+
+   printf("vetQtdNavBer\n");
+   for (int j = 0; j < numBer_; j++){
+      printf("%d - ", s.vetQtdNavBer[j]);
+   }
+   printf("\n\n\n");
+
+   printf("matSol\n");
+   for (int j = 0; j < numBer_; j++){
+      for (int i = 0; i < s.maiorQtdNavBer; i++){
+         printf("%d - ", s.matSol[j][i]);
+      }
+      printf("\n");
+   }
+   printf("\n\n\n\n");
 }

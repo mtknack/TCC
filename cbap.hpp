@@ -44,7 +44,7 @@ int vetPosIniBer_[MAX_BER];
 int vetPosFinBer_[MAX_BER];
 int vetTamTotalBer_[MAX_BER]; // tamanho total que x berco pode ocupar
 int vetIdBerOrdTamTotal_[MAX_BER]; // id do berco ordenado pelo seu tamanho crescente
-int vetTempAtualBer_[MAX_BER]; // tempo atual de atendimento do berco
+// int vetTempAtualBer_[MAX_BER]; // tempo atual de atendimento do berco
 int vetIdBercoMelhorTemp_[MAX_BER]; // vetor com os ids do berco que com o barco atual ocupa o menor tempo
 
 
@@ -54,7 +54,7 @@ void calc_fo(Solucao &s);
 void criar_solucao(Solucao &s);
 void inicializar_hor_pos_navios(Solucao &s);
 bool navios_sobrepostos(Solucao &s, const int &n1, const int &n2);
-void verificar_solucao(Solucao &s);
+void verificar_solucao(Solucao &s, bool indicador);
 void ler_solucao(Solucao &s, char *arq);
 void escrever_solucao(Solucao &s, char *arq);
 void clonar_solucao(Solucao &o, Solucao &c);
@@ -71,6 +71,9 @@ void merge(int arr[], int aux[], int left, int middle, int right);
 void mergeSort(int arr[], int aux[], int left, int right);
 
 // novo
+void printarDadosSolucao(Solucao &s);
+void iniciaGrasp(int Inst, int Vez);
+void grasp(Solucao &s, int maxIter, float alpha);
 void testaVNS(int Inst, int Vez);
 void ordenar_nav_hor_che(Solucao &s,int ber); // ordena os navios por ordem de chegada
 void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd);
