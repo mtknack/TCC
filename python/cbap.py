@@ -3,9 +3,9 @@ import plotly.graph_objects as go
 import plotly.io as pio
 pio.renderers.default='browser'
 
-inst_id = 2
-inst_vez = 2
-inst_fo = 4395
+inst_id = 5
+inst_vez = 7
+inst_fo = 1571
 
 # LINUX
 # arq_instancia = '..//instancias/inst' + str(inst_id) + '.txt'

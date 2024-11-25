@@ -40,7 +40,7 @@ int main()
    // TESTE UNICO DE INSTANCIA
    // srand(time(NULL));
    // testaVNS(1, 6);
-   iniciaGrasp(3, 6);
+   iniciaGrasp(1, 7);
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -736,6 +736,8 @@ void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd){
       h = clock() - h;
       tempExec += (double)h/CLOCKS_PER_SEC;
       // printf("tempExec=%f / %f -  qtd=%d / %d\n",tempExec,ITmaxTempo, i,qtd);
+
+      printarDadosSolucao(S1);
    }
 }
 
@@ -1188,7 +1190,7 @@ void grasp(Solucao &s, int maxIter, float alpha){
    Solucao Sa, Si;
    srand(time(NULL));
    int melhor = 1000000;
-   double ITmaxTempo = 120;//Segundos
+   double ITmaxTempo = 1;//Segundos
    int qtd = -1;
    int qViz = 3;
 
@@ -1219,7 +1221,7 @@ void grasp(Solucao &s, int maxIter, float alpha){
 void iniciaGrasp(int Inst, int Vez){
 
    Solucao s;
-   int maxIter = 10;
+   int maxIter = 1;
    float alpha = 1;
    char arq[50];
    sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
