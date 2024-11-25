@@ -2,6 +2,7 @@
 #include <string.h>
 #include <time.h>
 #include <limits.h>
+#include <math.h>
 
 #include "cbap.hpp"
 
@@ -40,7 +41,16 @@ int main()
    // TESTE UNICO DE INSTANCIA
    // srand(time(NULL));
    // testaVNS(1, 6);
-   iniciaGrasp(1, 7);
+   // iniciaGrasp(1, 7);
+
+   char arq1[50], arq2[50];
+   for (int i = 1; i < 6; i++){
+      for(int j = 1; j < 4;j++){
+         tempMelhorSol = 0;
+         iniciaGrasp(i, j);
+         printf("inst%d-vez%d MelhorTempFO = %f\n",i,j,tempMelhorSol);
+      }
+   }
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -654,7 +664,7 @@ void testaVNS(int Inst, int Vez){
    atualizar_dimensoes_bercos();
    // criar_solucao(s);
    descobre_tam_total_dos_bercos();
-   criar_solucao_por_tamanho(s);
+   criar_solucao_por_tamanho(s, 0.6);
    calc_fo(s);
 
    // printf("%d\n", s.maiorQtdNavBer);
@@ -944,7 +954,7 @@ void gerarViz4(Solucao &S){ //Troca somente um navio de berco aleatório varias 
    calc_fo(S);
 }
 
-void criar_solucao_por_tamanho(Solucao &s)
+void criar_solucao_por_tamanho(Solucao &s, float alpha)
 {
    int nav, ber, aux;
    memset(&s.vetQtdNavBer, 0, sizeof(s.vetQtdNavBer));
@@ -954,7 +964,7 @@ void criar_solucao_por_tamanho(Solucao &s)
    for (int i = 0; i < numNav_; i++)
    {
       nav = vetIndNavOrd_[i];
-      ber = verificaMenorTempoBer(s, nav);
+      ber = verificaMenorTempoBer(s, nav, alpha);
       // printf("ber escolhido - %d   matTemAte_[ber][nav] %d\n", ber, matTemAte_[ber][nav]);
 
       // if(i == 3){
@@ -962,10 +972,10 @@ void criar_solucao_por_tamanho(Solucao &s)
       // }
       if (matTemAte_[ber][nav] == 0)
       {
-         aux = verificaMenorTempoBer(s, nav);
+         aux = verificaMenorTempoBer(s, nav, alpha);
          // int temp = 0;
          while (matTemAte_[aux][nav] == 0){
-            aux = verificaMenorTempoBer(s, nav);
+            aux = verificaMenorTempoBer(s, nav, alpha);
             // temp++;
             // if(temp == 3){
             //    // ver bug em instancias grandes
@@ -1054,7 +1064,7 @@ void ordernar_berco_asc(){
    }
 }
 
-int verificaMenorTempoBer(Solucao &s, int nav){
+int verificaMenorTempoBer(Solucao &s, int nav, float alpha){
    
    int n = numBer_; // para não modificar o valor de numBer_
    int auxId, auxTam, vetAuxTemp[MAX_BER], vetAuxIdBerco[MAX_BER];
@@ -1111,8 +1121,13 @@ int verificaMenorTempoBer(Solucao &s, int nav){
    //    printf("%d - ", vetAuxIdBerco[i]);
    // }
    // printf("\n");
+
+   int porcentagemBercos = (int) floor(numBer_ * alpha);
+   if(porcentagemBercos == 0){
+      porcentagemBercos += 1;
+   }
    
-   return vetAuxIdBerco[ rand() % (numBer_/4 + 1)];
+   return vetAuxIdBerco[ rand() % porcentagemBercos];
    // return vetAuxIdBerco[0];
 }
 
@@ -1190,13 +1205,13 @@ void grasp(Solucao &s, int maxIter, float alpha){
    Solucao Sa, Si;
    srand(time(NULL));
    int melhor = 1000000;
-   double ITmaxTempo = 1;//Segundos
+   double ITmaxTempo = 1; // Segundos
    int qtd = -1;
    int qViz = 3;
 
    for (int i = 0; i < maxIter; i++)
    {
-      criar_solucao_por_tamanho(Si);
+      criar_solucao_por_tamanho(Si, alpha);
       calc_fo(Si);
       printf("Entrei no VNS %d\n", i); 
       VNS(Si, ITmaxTempo, qViz, qtd);
@@ -1222,7 +1237,7 @@ void iniciaGrasp(int Inst, int Vez){
 
    Solucao s;
    int maxIter = 1;
-   float alpha = 1;
+   float alpha = Vez * 0.2;
    char arq[50];
    sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
    ler_instancia(arq);

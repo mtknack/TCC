@@ -62,11 +62,11 @@ void ordenar_navios(int *vetInd, int *vetVal);
 void testar_instancia(char *arq);
 void atualizar_dimensoes_bercos();
 void ler_instancia(char *arq);
-void criar_solucao_por_tamanho(Solucao &s);
+void criar_solucao_por_tamanho(Solucao &s, float alpha);
 void descobre_tam_total_dos_bercos();
 void ordernar_berco_asc();
 void inicializar_hor_pos_navios_2(Solucao &s);
-int verificaMenorTempoBer(Solucao &s, int nav);
+int verificaMenorTempoBer(Solucao &s, int nav, float alpha);
 void merge(int arr[], int aux[], int left, int middle, int right);
 void mergeSort(int arr[], int aux[], int left, int right);
 
