@@ -45,10 +45,9 @@ int main()
 
    char arq1[50], arq2[50];
    for (int i = 1; i < 6; i++){
-      for(int j = 1; j < 4;j++){
-         tempMelhorSol = 0;
+      for(int j = 1; j < 6;j++){
+         printf("instancia: %d - vez: %d\n",i,j);
          iniciaGrasp(i, j);
-         printf("inst%d-vez%d MelhorTempFO = %f\n",i,j,tempMelhorSol);
       }
    }
 
@@ -1213,19 +1212,19 @@ void grasp(Solucao &s, int maxIter, float alpha){
    {
       criar_solucao_por_tamanho(Si, alpha);
       calc_fo(Si);
-      printf("Entrei no VNS %d\n", i); 
-      VNS(Si, ITmaxTempo, qViz, qtd);
-      printf("Travei antes no VNS %d\n", i); 
+      // printf("Entrei no VNS %d\n", i); 
+      // VNS(Si, ITmaxTempo, qViz, qtd);
+      // printf("Travei antes no VNS %d\n", i); 
       verificar_solucao(Si, false);
 
 
       if(Si.funObj < melhor){
-         printf("Melhor: %d\n", Si.funObj);
+         // printf("Melhor: %d\n", Si.funObj);
          clonar_solucao(Si, Sa);
          melhor = Sa.funObj;
       }
       else{
-         printf("Nao melhor: %d\n", Si.funObj);
+         // printf("Nao melhor: %d\n", Si.funObj);
          memset(&Si, 0, sizeof(Solucao));
       }
    }
@@ -1248,18 +1247,18 @@ void iniciaGrasp(int Inst, int Vez){
    descobre_tam_total_dos_bercos();
 
    // chamando o metodo
-   printf("Iniciando grasp\n");
+   // printf("Iniciando grasp\n");
    grasp(s, maxIter, alpha);
-   printf("MelFO = %d\n", s.funObj);
+   // printf("MelFO = %d\n", s.funObj);
    printf("TempSer = %d\n", s.temSer);
 
    // imprimindo solução
-   for (int j = 0; j < numBer_; j++){
-      for (int i = 0; i < s.maiorQtdNavBer; i++){
-         printf("%d - ", s.matSol[j][i]);
-      }
-      printf("\n");
-   }
+   // for (int j = 0; j < numBer_; j++){
+   //    for (int i = 0; i < s.maiorQtdNavBer; i++){
+   //       printf("%d - ", s.matSol[j][i]);
+   //    }
+   //    printf("\n");
+   // }
   
    sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, s.funObj);
    escrever_solucao(s, arq);
