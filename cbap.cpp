@@ -39,17 +39,18 @@ int main()
 
    
    // TESTE UNICO DE INSTANCIA
-   // srand(time(NULL));
+   srand(time(NULL));
    // testaVNS(1, 6);
-   // iniciaGrasp(1, 7);
+   iniciaGrasp(1, 7);
 
-   char arq1[50], arq2[50];
-   for (int i = 1; i < 6; i++){
-      for(int j = 1; j < 6;j++){
-         printf("instancia: %d - vez: %d\n",i,j);
-         iniciaGrasp(i, j);
-      }
-   }
+   // TESTE MULTIPLO
+   // char arq1[50], arq2[50];
+   // for (int i = 1; i < 6; i++){
+   //    for(int j = 1; j < 6;j++){
+   //       printf("instancia: %d - vez: %d\n",i,j);
+   //       iniciaGrasp(i, j);
+   //    }
+   // }
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -703,14 +704,11 @@ void testaVNS(int Inst, int Vez){
 
 void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd){
    Solucao S1;
-   clock_t h;
-   double tempExec = 0;
-   int i=1,k;
+   int i = 1, k, xVezesMelhor = 0;
    
    clonar_solucao(S,S1);
    printarDadosSolucao(S1);
-   while(tempExec <= ITmaxTempo || i <= qtd){
-      h = clock();
+   while(i <= qtd){
       ++i;
       k = 1;
       while(k <= qViz){
@@ -729,24 +727,30 @@ void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd){
             break;
          }
 
-         heuBLPM(S1); // Busca local primeira melhora
+         // heuBLPM(S1); // Busca local primeira melhora
          if(S1.funObj < S.funObj){ // para maximizar use ">", para minimizar use "<"
             clonar_solucao(S1,S);
             k = 1;
+            xVezesMelhor = 0;
             //printf("funObj - %d\n", S.funObj);
-            tempMelhorSol = tempExec;
          }else{
             clonar_solucao(S,S1);
             // printf("N melhorou\n");
-            k++;
+
+            if(xVezesMelhor <= numNav_/2){
+               k = 1;
+            } else if(xVezesMelhor <= numNav_){
+               k = 2;
+            } else {
+               k = 3;
+               xVezesMelhor = 0;
+            }
+
+            xVezesMelhor++;
          }
       }
 
-      h = clock() - h;
-      tempExec += (double)h/CLOCKS_PER_SEC;
-      // printf("tempExec=%f / %f -  qtd=%d / %d\n",tempExec,ITmaxTempo, i,qtd);
-
-      printarDadosSolucao(S1);
+      // printarDadosSolucao(S1);
    }
 }
 
@@ -1205,7 +1209,7 @@ void grasp(Solucao &s, int maxIter, float alpha){
    srand(time(NULL));
    int melhor = 1000000;
    double ITmaxTempo = 1; // Segundos
-   int qtd = -1;
+   int qtd = 100000;
    int qViz = 3;
 
    for (int i = 0; i < maxIter; i++)
@@ -1213,7 +1217,7 @@ void grasp(Solucao &s, int maxIter, float alpha){
       criar_solucao_por_tamanho(Si, alpha);
       calc_fo(Si);
       // printf("Entrei no VNS %d\n", i); 
-      // VNS(Si, ITmaxTempo, qViz, qtd);
+      VNS(Si, ITmaxTempo, qViz, qtd);
       // printf("Travei antes no VNS %d\n", i); 
       verificar_solucao(Si, false);
 
@@ -1235,8 +1239,8 @@ void grasp(Solucao &s, int maxIter, float alpha){
 void iniciaGrasp(int Inst, int Vez){
 
    Solucao s;
-   int maxIter = 1;
-   float alpha = Vez * 0.2;
+   int maxIter = 10;
+   float alpha = 0.6;
    char arq[50];
    sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
    ler_instancia(arq);
@@ -1253,12 +1257,12 @@ void iniciaGrasp(int Inst, int Vez){
    printf("TempSer = %d\n", s.temSer);
 
    // imprimindo solução
-   // for (int j = 0; j < numBer_; j++){
-   //    for (int i = 0; i < s.maiorQtdNavBer; i++){
-   //       printf("%d - ", s.matSol[j][i]);
-   //    }
-   //    printf("\n");
-   // }
+   for (int j = 0; j < numBer_; j++){
+      for (int i = 0; i < s.maiorQtdNavBer; i++){
+         printf("%d - ", s.matSol[j][i]);
+      }
+      printf("\n");
+   }
   
    sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, s.funObj);
    escrever_solucao(s, arq);
