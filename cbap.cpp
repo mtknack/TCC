@@ -39,7 +39,7 @@ int main()
 
    
    // TESTE UNICO DE INSTANCIA
-   srand(time(NULL));
+   // srand(time(NULL));
    // testaVNS(1, 6);
    iniciaGrasp(1, 7);
 
@@ -704,51 +704,48 @@ void testaVNS(int Inst, int Vez){
 
 void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd){
    Solucao S1;
-   int i = 1, k, xVezesMelhor = 0;
+   int i = 1, k = 1;
    
    clonar_solucao(S,S1);
    printarDadosSolucao(S1);
    while(i <= qtd){
       ++i;
-      k = 1;
-      while(k <= qViz){
-         switch (k){
-         case 1:
-            gerarViz1(S1,true);
-            break;
-         case 2:
-            gerarViz2(S1);
-            break;
-         case 3:
-            gerarViz3(S1);
-            break;
-         case 4:
-            gerarViz4(S1); // inconcluido, erro de travamento mas não deu tempo para achar
-            break;
-         }
 
-         // heuBLPM(S1); // Busca local primeira melhora
-         if(S1.funObj < S.funObj){ // para maximizar use ">", para minimizar use "<"
-            clonar_solucao(S1,S);
-            k = 1;
-            xVezesMelhor = 0;
-            //printf("funObj - %d\n", S.funObj);
-         }else{
-            clonar_solucao(S,S1);
-            // printf("N melhorou\n");
-
-            if(xVezesMelhor <= numNav_/2){
-               k = 1;
-            } else if(xVezesMelhor <= numNav_){
-               k = 2;
-            } else {
-               k = 3;
-               xVezesMelhor = 0;
-            }
-
-            xVezesMelhor++;
-         }
+      switch (k){
+      case 1:
+         gerarViz1(S1,true);
+         break;
+      case 2:
+         gerarViz2(S1);
+         break;
+      case 3:
+         gerarViz3(S1);
+         break;
+      case 4:
+         gerarViz4(S1); // inconcluido, erro de travamento mas não deu tempo para achar
+         break;
       }
+
+      // heuBLPM(S1); // Busca local primeira melhora
+      if(S1.funObj < S.funObj){ // para maximizar use ">", para minimizar use "<"
+         clonar_solucao(S1,S);
+         //printf("funObj - %d\n", S.funObj);
+      }else{
+         clonar_solucao(S,S1);
+         // printf("N melhorou\n");
+
+         if(k < qViz){
+            k++;
+         } else {
+            k = 1;
+         }
+
+         // utilizar para que todos os vizinhos sejam utilizados de forma a que se não melhorar pular para o proximo - OK
+         // fazer a quantidade de vezes ser proporcional a quantidade de berços e navios - OK 
+         // olhar no artigo de geraldo qual o criterio de parada (tempo ou numero de iterações) (variavel o fixo)
+         // olhar quantas vezes foi executada cada instancia no trabalho do geraldo
+      }
+
 
       // printarDadosSolucao(S1);
    }
@@ -1209,7 +1206,7 @@ void grasp(Solucao &s, int maxIter, float alpha){
    srand(time(NULL));
    int melhor = 1000000;
    double ITmaxTempo = 1; // Segundos
-   int qtd = 100000;
+   int qtd = (numNav_ * numBer_) * 500; // decidir a quantidade para escalar
    int qViz = 3;
 
    for (int i = 0; i < maxIter; i++)
@@ -1223,7 +1220,7 @@ void grasp(Solucao &s, int maxIter, float alpha){
 
 
       if(Si.funObj < melhor){
-         // printf("Melhor: %d\n", Si.funObj);
+         printf("Melhor: %d\n", Si.funObj);
          clonar_solucao(Si, Sa);
          melhor = Sa.funObj;
       }
@@ -1239,7 +1236,7 @@ void grasp(Solucao &s, int maxIter, float alpha){
 void iniciaGrasp(int Inst, int Vez){
 
    Solucao s;
-   int maxIter = 10;
+   int maxIter = 20;
    float alpha = 0.6;
    char arq[50];
    sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
