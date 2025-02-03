@@ -41,7 +41,7 @@ int main()
    // TESTE UNICO DE INSTANCIA
    // srand(time(NULL));
    // testaVNS(1, 6);
-   iniciaGrasp(1, 7);
+   iniciaGrasp(3, 7);
 
    // TESTE MULTIPLO
    // char arq1[50], arq2[50];
@@ -742,8 +742,8 @@ void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd){
 
          // utilizar para que todos os vizinhos sejam utilizados de forma a que se não melhorar pular para o proximo - OK
          // fazer a quantidade de vezes ser proporcional a quantidade de berços e navios - OK 
-         // olhar no artigo de geraldo qual o criterio de parada (tempo ou numero de iterações) (variavel o fixo)
-         // olhar quantas vezes foi executada cada instancia no trabalho do geraldo
+         // olhar no artigo de geraldo qual o criterio de parada (tempo ou numero de iterações) (variavel o fixo) - tempo com valor fixo
+         // olhar quantas vezes foi executada cada instancia no trabalho do geraldo - 10 vezes cada instancia com o maximo de 120s
       }
 
 
@@ -1206,7 +1206,7 @@ void grasp(Solucao &s, int maxIter, float alpha){
    srand(time(NULL));
    int melhor = 1000000;
    double ITmaxTempo = 1; // Segundos
-   int qtd = (numNav_ * numBer_) * 500; // decidir a quantidade para escalar
+   int qtd = (numNav_ * numBer_) * 20000; // decidir a quantidade para escalar
    int qViz = 3;
 
    for (int i = 0; i < maxIter; i++)
