@@ -73,10 +73,11 @@ void mergeSort(int arr[], int aux[], int left, int right);
 // novo
 void printarDadosSolucao(Solucao &s);
 void iniciaGrasp(int Inst, int Vez);
-void grasp(Solucao &s, int maxIter, float alpha);
+void grasp(Solucao &s, double ITmaxTempo, float alpha);
 void testaVNS(int Inst, int Vez);
 void ordenar_nav_hor_che(Solucao &s,int ber); // ordena os navios por ordem de chegada
-void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd);
+// void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd);
+void VNS(Solucao &S, int qViz, int qtd);
 void heuBLPM(Solucao &S); // Heuristica primeira melhora
 void gerarViz1(Solucao &S,bool att); // troca dois navios aleatorios entre si
 void gerarViz2(Solucao &S); // troca um navio aleatorio de berço

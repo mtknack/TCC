@@ -682,7 +682,7 @@ void testaVNS(int Inst, int Vez){
    double ITmaxTempo = 60;//Segundos
    int qtd = -1;
    int qViz = 3;
-   VNS(s, ITmaxTempo, qViz, qtd); 
+   // VNS(s, ITmaxTempo, qViz, qtd); 
    calc_fo(s);
    h = clock() - h; 
    tempo = (double)h/CLOCKS_PER_SEC;
@@ -702,9 +702,9 @@ void testaVNS(int Inst, int Vez){
    escrever_solucao(s, arq);
 }
 
-void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd){
+void VNS(Solucao &S, int qViz, int qtd){
    Solucao S1;
-   int i = 1, k = 1;
+   int i = 0, k = 1;
    
    clonar_solucao(S,S1);
    printarDadosSolucao(S1);
@@ -729,23 +729,16 @@ void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd){
       // heuBLPM(S1); // Busca local primeira melhora
       if(S1.funObj < S.funObj){ // para maximizar use ">", para minimizar use "<"
          clonar_solucao(S1,S);
-         //printf("funObj - %d\n", S.funObj);
+         k = 1;
       }else{
          clonar_solucao(S,S1);
-         // printf("N melhorou\n");
 
          if(k < qViz){
             k++;
          } else {
             k = 1;
          }
-
-         // utilizar para que todos os vizinhos sejam utilizados de forma a que se não melhorar pular para o proximo - OK
-         // fazer a quantidade de vezes ser proporcional a quantidade de berços e navios - OK 
-         // olhar no artigo de geraldo qual o criterio de parada (tempo ou numero de iterações) (variavel o fixo) - tempo com valor fixo
-         // olhar quantas vezes foi executada cada instancia no trabalho do geraldo - 10 vezes cada instancia com o maximo de 120s
       }
-
 
       // printarDadosSolucao(S1);
    }
@@ -1200,22 +1193,24 @@ void mergeSort(int arr[], int aux[], int left, int right) {
     }
 }
 
-void grasp(Solucao &s, int maxIter, float alpha){
+void grasp(Solucao &s, double ITmaxTempo, float alpha){
 
    Solucao Sa, Si;
    srand(time(NULL));
    int melhor = 1000000;
-   double ITmaxTempo = 1; // Segundos
-   int qtd = (numNav_ * numBer_) * 20000; // decidir a quantidade para escalar
+   int qtd = (numNav_ * numBer_) * 500; // calibrar parametros (contar quantas vezes o grasp executou em 120s) e comparar os resultados os resultados do geraldo
    int qViz = 3;
 
-   for (int i = 0; i < maxIter; i++)
+   clock_t h;
+   double tempExec = 0;
+
+   for (int i = 0; tempExec <= ITmaxTempo; i++)
    {
+      h = clock();
+
       criar_solucao_por_tamanho(Si, alpha);
       calc_fo(Si);
-      // printf("Entrei no VNS %d\n", i); 
-      VNS(Si, ITmaxTempo, qViz, qtd);
-      // printf("Travei antes no VNS %d\n", i); 
+      VNS(Si, qViz, qtd);
       verificar_solucao(Si, false);
 
 
@@ -1225,9 +1220,12 @@ void grasp(Solucao &s, int maxIter, float alpha){
          melhor = Sa.funObj;
       }
       else{
-         // printf("Nao melhor: %d\n", Si.funObj);
          memset(&Si, 0, sizeof(Solucao));
       }
+
+
+      h = clock() - h;
+      tempExec += (double)h/CLOCKS_PER_SEC;
    }
 
    clonar_solucao(Sa, s);
@@ -1236,21 +1234,17 @@ void grasp(Solucao &s, int maxIter, float alpha){
 void iniciaGrasp(int Inst, int Vez){
 
    Solucao s;
-   int maxIter = 20;
+   double ITmaxTempo = 120; // segundos
    float alpha = 0.6;
    char arq[50];
    sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
    ler_instancia(arq);
 
-   // metodos auxiliares
    ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
    atualizar_dimensoes_bercos();
    descobre_tam_total_dos_bercos();
 
-   // chamando o metodo
-   // printf("Iniciando grasp\n");
-   grasp(s, maxIter, alpha);
-   // printf("MelFO = %d\n", s.funObj);
+   grasp(s, ITmaxTempo, alpha);
    printf("TempSer = %d\n", s.temSer);
 
    // imprimindo solução
