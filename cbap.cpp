@@ -9,6 +9,8 @@
 #define MAX(x,y) (((x) > (y)) ? (x) : (y))
 
 char INST[50] = "inst";
+char INST_MOCCIA[50] = "i";
+char INST_CONTINUO[50] = "f";
 int PESO_NAV = 100;
 int PESO_BER = 1000;
 
@@ -41,7 +43,7 @@ int main()
    // TESTE UNICO DE INSTANCIA
    // srand(time(NULL));
    // testaVNS(1, 6);
-   iniciaGrasp(3, 7);
+   iniciaGrasp(1, 7, 2);
 
    // TESTE MULTIPLO
    // char arq1[50], arq2[50];
@@ -1238,23 +1240,7 @@ void iniciaGrasp(int Inst, int Vez, int instGroup){
    float alpha = 0.6;
    char arq[50];
 
-   switch (instGroup){
-   case 1: // trabalho de metodos
-      sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
-      break;
-   case 2: // instancias moccia
-      sprintf(arq, ".//instancias_moccia//%s%d.txt", INST, Inst);
-      break;
-   case 3: // instancias continuo
-      sprintf(arq, ".//inst-continuo//%s%d.txt", INST, Inst);
-      break;
-   default:
-      break;
-   }
-  
-   // instancias moccia
-   
-   ler_instancia(arq);
+   ler_instancias_TCC(arq, Inst, Vez, instGroup);
    ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
    atualizar_dimensoes_bercos();
    descobre_tam_total_dos_bercos();
@@ -1270,8 +1256,84 @@ void iniciaGrasp(int Inst, int Vez, int instGroup){
       printf("\n");
    }
   
-   sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, s.funObj);
+   escrever_instancias_TCC(arq, Inst, Vez, s.funObj, instGroup);
    escrever_solucao(s, arq);
+}
+
+void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup)
+{
+
+   switch (instGroup){
+   case 1: // trabalho de metodos
+      sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
+      ler_instancia(arq);
+      break;
+   case 2: // instancias moccia
+      if(Inst < 10){
+         printf(".//instancias_moccia//%s0%d", INST_MOCCIA, Inst);
+         sprintf(arq, ".//instancias_moccia//%s0%d", INST_MOCCIA, Inst);
+      } else {
+         sprintf(arq, ".//instancias_moccia//%s%d", INST_MOCCIA, Inst);
+      }
+      ler_instancia_moccia(arq);
+      break;
+   case 3: // instancias continuo - não concluido
+      sprintf(arq, ".//inst-continuo//%s%d.txt", INST_CONTINUO, Inst);
+      break;
+   default:
+      break;
+   }
+}
+
+void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instGroup)
+{
+
+   switch (instGroup){
+   case 1: // trabalho de metodos
+      sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
+      break;
+   case 2: // instancias moccia
+      sprintf(arq, ".//instancias_moccia_result//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
+      break;
+   case 3: // instancias continuo - não concluido
+      sprintf(arq, ".//instancias_moccia_result//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
+      break;
+   default:
+      break;
+   }
+}
+
+
+void ler_instancia_moccia(char *arq)
+{
+   FILE *f = fopen(arq, "r");
+   if (!f) {
+      perror("Erro ao abrir o arquivo");
+      exit(EXIT_FAILURE);
+   }
+
+   fscanf(f, "%d %d", &numNav_, &numBer_);
+
+   for (int i = 0; i < numBer_; i++)
+      for (int j = 0; j < numNav_; j++)
+         fscanf(f, "%d", &matTemAte_[i][j]);
+
+   for (int i = 0; i < numBer_; i++)
+      fscanf(f, "%d %d %*d", &vetHorAbeBer_[i], &vetHorFecBer_[i]);
+
+   for (int i = 0; i < numNav_; i++)
+      fscanf(f, "%d", &vetHorCheNav_[i]);
+
+   for (int i = 0; i < numNav_; i++)
+      fscanf(f, "%d", &vetHorMaxNav_[i]);
+
+   for (int i = 0; i < numBer_; i++)
+      fscanf(f, "%d %d %*d %*d", &vetTamLEBer_[i], &vetTamLDBer_[i]);
+
+   for (int i = 0; i < numNav_; i++)
+      fscanf(f, "%d", &vetTamNav_[i]);
+
+   fclose(f);
 }
 
 void printarDadosSolucao(Solucao &s){

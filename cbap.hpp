@@ -72,7 +72,10 @@ void mergeSort(int arr[], int aux[], int left, int right);
 
 // novo
 void printarDadosSolucao(Solucao &s);
-void iniciaGrasp(int Inst, int Vez);
+void iniciaGrasp(int Inst, int Vez, int instGroup);
+void ler_instancia_moccia(char *arq);
+void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup);
+void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instGroup);
 void grasp(Solucao &s, double ITmaxTempo, float alpha);
 void testaVNS(int Inst, int Vez);
 void ordenar_nav_hor_che(Solucao &s,int ber); // ordena os navios por ordem de chegada
