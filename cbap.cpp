@@ -1231,15 +1231,30 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha){
    clonar_solucao(Sa, s);
 }
 
-void iniciaGrasp(int Inst, int Vez){
+void iniciaGrasp(int Inst, int Vez, int instGroup){
 
    Solucao s;
    double ITmaxTempo = 120; // segundos
    float alpha = 0.6;
    char arq[50];
-   sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
-   ler_instancia(arq);
 
+   switch (instGroup){
+   case 1: // trabalho de metodos
+      sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
+      break;
+   case 2: // instancias moccia
+      sprintf(arq, ".//instancias_moccia//%s%d.txt", INST, Inst);
+      break;
+   case 3: // instancias continuo
+      sprintf(arq, ".//inst-continuo//%s%d.txt", INST, Inst);
+      break;
+   default:
+      break;
+   }
+  
+   // instancias moccia
+   
+   ler_instancia(arq);
    ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
    atualizar_dimensoes_bercos();
    descobre_tam_total_dos_bercos();
