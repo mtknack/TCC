@@ -43,15 +43,13 @@ int main()
    // TESTE UNICO DE INSTANCIA
    // srand(time(NULL));
    // testaVNS(1, 6);
-   iniciaGrasp(1, 7, 2);
+   iniciaGrasp(30, 1, 2);
 
    // TESTE MULTIPLO
-   // char arq1[50], arq2[50];
    // for (int i = 1; i < 6; i++){
-   //    for(int j = 1; j < 6;j++){
-   //       printf("instancia: %d - vez: %d\n",i,j);
-   //       iniciaGrasp(i, j);
-   //    }
+      // for(int j = 1; j < 30; j++){
+      //    iniciaGrasp(j, 1, 2);
+      // }
    // }
 
 
@@ -709,7 +707,7 @@ void VNS(Solucao &S, int qViz, int qtd){
    int i = 0, k = 1;
    
    clonar_solucao(S,S1);
-   printarDadosSolucao(S1);
+   // printarDadosSolucao(S1);
    while(i <= qtd){
       ++i;
 
@@ -1200,8 +1198,9 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha){
    Solucao Sa, Si;
    srand(time(NULL));
    int melhor = 1000000;
-   int qtd = (numNav_ * numBer_) * 500; // calibrar parametros (contar quantas vezes o grasp executou em 120s) e comparar os resultados os resultados do geraldo
+   int qtd = (numNav_ * numBer_) * 400; // calibrar parametros (contar quantas vezes o grasp executou em 120s) e comparar os resultados os resultados do geraldo
    int qViz = 3;
+   int temp = 0; 
 
    clock_t h;
    double tempExec = 0;
@@ -1228,9 +1227,11 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha){
 
       h = clock() - h;
       tempExec += (double)h/CLOCKS_PER_SEC;
+      temp++;
    }
 
    clonar_solucao(Sa, s);
+   printf("Rodei %d vezes no grasp com tempo %f\n", temp, tempExec);
 }
 
 void iniciaGrasp(int Inst, int Vez, int instGroup){
