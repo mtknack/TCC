@@ -4,8 +4,8 @@ import plotly.io as pio
 pio.renderers.default='browser'
 
 inst_id = 1
-inst_vez = 7
-inst_fo = 1773
+inst_vez = 1
+inst_fo = 1781
 
 # LINUX
 # arq_instancia = '..//instancias/inst' + str(inst_id) + '.txt'
@@ -13,9 +13,11 @@ inst_fo = 1773
 # arq_solucao = '..//instancias/inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
 
 # WINDOWS
-arq_instancia = '.\instancias\inst' + str(inst_id) + '.txt'
+# arq_instancia = '.\instancias\inst' + str(inst_id) + '.txt'
+arq_instancia = '.\instancias_moccia\i0' + str(inst_id) + '' # moccia
 # arq_solucao = '..//boas-inst/inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
-arq_solucao = '.\instancias\inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
+# arq_solucao = '.\instancias\inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '.sol'
+arq_solucao = '.\parametros_moccia\inst' + str(inst_id) + '-' + str(inst_vez) + '-' + str(inst_fo) + '-0.20-200.sol' # moccia
 
 #-----------------------------------------------------------------------------------------------------------------------
 def ler_instancia(arq_inst):
@@ -72,6 +74,60 @@ def ler_instancia(arq_inst):
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
+def ler_instancia_moccia(arq_inst):
+    with open(arq_inst) as f:
+        arq = f.readlines()
+    #---
+    aux = arq[0]
+    aux = aux.split()
+    navios = int(aux[0])
+    bercos = int(aux[1])
+    #---
+    vet_tamanho_N = [0] * navios
+    aux = arq[2]
+    aux = aux.split()
+    for i in range(navios):
+        vet_tamanho_N[i] = int(aux[i])
+    #---
+    vet_tem_che_N = [0] * navios
+    aux = arq[4]
+    aux = aux.split()
+    for i in range(navios):
+        vet_tem_che_N[i] = int(aux[i])
+    #---
+    vet_tem_max_N = [0] * navios
+    aux = arq[6]
+    aux = aux.split()
+    for i in range(navios):
+        vet_tem_max_N[i] = int(aux[i])
+    #---
+    vet_tem_abe_B = [0] * bercos
+    vet_tem_max_B = [0] * bercos
+    for i in range(bercos):
+        aux = arq[8+i]
+        aux = aux.split()
+        vet_tem_abe_B[i] = int(aux[0])
+        vet_tem_max_B[i] = int(aux[1])
+    #---
+    vet_tam_viz_esq_B = [0] * bercos
+    vet_tam_viz_dir_B = [0] * bercos
+    for i in range(bercos):
+        aux = arq[8+bercos+1+i]
+        aux = aux.split()
+        vet_tam_viz_esq_B[i] = int(aux[0])
+        vet_tam_viz_dir_B[i] = int(aux[1])
+    #---
+    mat_tem_ate = [[0] * (navios) for i in range(bercos)]        
+    for i in range(bercos):
+        aux = arq[8+bercos+1+bercos+1+i]
+        aux = aux.split()
+        for j in range(navios):
+            mat_tem_ate[i][j] = int(aux[j])
+
+    return navios, bercos, vet_tamanho_N, vet_tem_che_N, vet_tem_max_N, vet_tem_abe_B, vet_tem_max_B, vet_tam_viz_esq_B, vet_tam_viz_dir_B, mat_tem_ate
+#-----------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------
 def ler_solucao(arq_sol, navios):
     with open(arq_sol) as f:
         arq = f.readlines()
@@ -93,7 +149,7 @@ def ler_solucao(arq_sol, navios):
 
 #-----------------------------------------------------------------------------------------------------------------------
 # PROGRAMA PRINCIPAL
-navios, bercos, vet_tamanho_N, vet_tem_che_N, vet_tem_max_N, vet_tem_abe_B, vet_tem_max_B, vet_tam_viz_esq_B, vet_tam_viz_dir_B, mat_tem_ate = ler_instancia(arq_instancia)
+navios, bercos, vet_tamanho_N, vet_tem_che_N, vet_tem_max_N, vet_tem_abe_B, vet_tem_max_B, vet_tam_viz_esq_B, vet_tam_viz_dir_B, mat_tem_ate = ler_instancia_moccia(arq_instancia)
 print('\n----------------------------')
 print('INSTÂNCIA')
 print('----------------------------')

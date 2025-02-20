@@ -43,14 +43,42 @@ int main()
    // TESTE UNICO DE INSTANCIA
    // srand(time(NULL));
    // testaVNS(1, 6);
-   iniciaGrasp(30, 1, 2);
+   // iniciaGrasp(30, 1, 2);
 
    // TESTE MULTIPLO
-   // for (int i = 1; i < 6; i++){
-      // for(int j = 1; j < 30; j++){
-      //    iniciaGrasp(j, 1, 2);
-      // }
-   // }
+   float alpha = 0.6;
+   int qtd = 200;
+   double ITmaxTempo = 120; // segundos
+
+   for (int i = 1; i < 6; i++){
+      for(int j = 0; j < 4; j++){
+         if(j == 0){
+            alpha = 0.2;
+         } else if(j == 1){
+            alpha = 0.4;
+         }else if(j == 2){
+            alpha = 0.6;
+         }else if(j == 3){
+            alpha = 0.8;
+         }
+
+         for(int z = 0; z < 4; z++){
+            if(z == 0){
+               qtd = 200;
+            } else if(z == 1){
+               qtd = 300;
+            }else if(z == 2){
+               qtd = 400;
+            }else if(z == 3){
+               qtd = 500;
+            }
+
+            iniciaGrasp(1, i, ITmaxTempo, alpha, qtd, 2);
+            iniciaGrasp(15, i, ITmaxTempo, alpha, qtd, 2);
+            iniciaGrasp(30, i, ITmaxTempo, alpha, qtd, 2);
+         }
+      }
+   }
 
 
    //COLETAR DADOS PARA A TABELA DO TRABALHO 2
@@ -1193,12 +1221,11 @@ void mergeSort(int arr[], int aux[], int left, int right) {
     }
 }
 
-void grasp(Solucao &s, double ITmaxTempo, float alpha){
+void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd){
 
    Solucao Sa, Si;
    srand(time(NULL));
    int melhor = 1000000;
-   int qtd = (numNav_ * numBer_) * 400; // calibrar parametros (contar quantas vezes o grasp executou em 120s) e comparar os resultados os resultados do geraldo
    int qViz = 3;
    int temp = 0; 
 
@@ -1216,7 +1243,7 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha){
 
 
       if(Si.funObj < melhor){
-         printf("Melhor: %d\n", Si.funObj);
+         // printf("Melhor: %d\n", Si.funObj);
          clonar_solucao(Si, Sa);
          melhor = Sa.funObj;
       }
@@ -1231,14 +1258,12 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha){
    }
 
    clonar_solucao(Sa, s);
-   printf("Rodei %d vezes no grasp com tempo %f\n", temp, tempExec);
+   // printf("Rodei %d vezes no grasp com tempo %f\n", temp, tempExec);
 }
 
-void iniciaGrasp(int Inst, int Vez, int instGroup){
+void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int instGroup){
 
    Solucao s;
-   double ITmaxTempo = 120; // segundos
-   float alpha = 0.6;
    char arq[50];
 
    ler_instancias_TCC(arq, Inst, Vez, instGroup);
@@ -1246,18 +1271,20 @@ void iniciaGrasp(int Inst, int Vez, int instGroup){
    atualizar_dimensoes_bercos();
    descobre_tam_total_dos_bercos();
 
-   grasp(s, ITmaxTempo, alpha);
-   printf("TempSer = %d\n", s.temSer);
+   int qtdVns = (numBer_ * numNav_) * qtd;
 
-   // imprimindo solução
-   for (int j = 0; j < numBer_; j++){
-      for (int i = 0; i < s.maiorQtdNavBer; i++){
-         printf("%d - ", s.matSol[j][i]);
-      }
-      printf("\n");
-   }
+   grasp(s, ITmaxTempo, alpha, qtdVns);
+   // printf("TempSer = %d\n", s.temSer);
+
+   // // imprimindo solução
+   // for (int j = 0; j < numBer_; j++){
+   //    for (int i = 0; i < s.maiorQtdNavBer; i++){
+   //       printf("%d - ", s.matSol[j][i]);
+   //    }
+   //    printf("\n");
+   // }
   
-   escrever_instancias_TCC(arq, Inst, Vez, s.funObj, instGroup);
+   escrever_instancias_TCC(arq, Inst, Vez, s.funObj, instGroup, alpha, qtd);
    escrever_solucao(s, arq);
 }
 
@@ -1271,7 +1298,6 @@ void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup)
       break;
    case 2: // instancias moccia
       if(Inst < 10){
-         printf(".//instancias_moccia//%s0%d", INST_MOCCIA, Inst);
          sprintf(arq, ".//instancias_moccia//%s0%d", INST_MOCCIA, Inst);
       } else {
          sprintf(arq, ".//instancias_moccia//%s%d", INST_MOCCIA, Inst);
@@ -1286,7 +1312,7 @@ void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup)
    }
 }
 
-void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instGroup)
+void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instGroup, float alpha, int qtd)
 {
 
    switch (instGroup){
@@ -1294,7 +1320,8 @@ void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instG
       sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
       break;
    case 2: // instancias moccia
-      sprintf(arq, ".//instancias_moccia_result//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
+      // sprintf(arq, ".//instancias_moccia_result//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
+      sprintf(arq, ".//parametros_moccia//%s%d-%d-%d-%.2f-%d.sol", INST, Inst, Vez, funObj, alpha, qtd);
       break;
    case 3: // instancias continuo - não concluido
       sprintf(arq, ".//instancias_moccia_result//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
