@@ -76,7 +76,8 @@ void iniciaGrasp(int Inst, int Vez,  double ITmaxTempo, float alpha, int qtd, in
 void ler_instancia_moccia(char *arq);
 void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup);
 void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instGroup, float alpha, int qtd);
-void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd);
+void escrever_instancias_arquivo_TCC(int Inst, int Vez, int funObj, double time);
+void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd, double &bestFOtime);
 void testaVNS(int Inst, int Vez);
 void ordenar_nav_hor_che(Solucao &s,int ber); // ordena os navios por ordem de chegada
 // void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd);

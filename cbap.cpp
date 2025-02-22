@@ -53,24 +53,24 @@ int main()
    for (int i = 1; i < 6; i++){
       for(int j = 0; j < 4; j++){
          if(j == 0){
-            alpha = 0.2;
+            alpha = 0.1;
          } else if(j == 1){
-            alpha = 0.4;
+            alpha = 0.14;
          }else if(j == 2){
-            alpha = 0.6;
+            alpha = 0.18;
          }else if(j == 3){
-            alpha = 0.8;
+            alpha = 0.2;
          }
 
          for(int z = 0; z < 4; z++){
             if(z == 0){
-               qtd = 200;
+               qtd = 0;
             } else if(z == 1){
-               qtd = 300;
+               qtd = 50;
             }else if(z == 2){
-               qtd = 400;
+               qtd = 150;
             }else if(z == 3){
-               qtd = 500;
+               qtd = 200;
             }
 
             iniciaGrasp(1, i, ITmaxTempo, alpha, qtd, 2);
@@ -1221,7 +1221,7 @@ void mergeSort(int arr[], int aux[], int left, int right) {
     }
 }
 
-void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd){
+void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd, double &bestFOtime){
 
    Solucao Sa, Si;
    srand(time(NULL));
@@ -1246,6 +1246,7 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd){
          // printf("Melhor: %d\n", Si.funObj);
          clonar_solucao(Si, Sa);
          melhor = Sa.funObj;
+         bestFOtime = tempExec;
       }
       else{
          memset(&Si, 0, sizeof(Solucao));
@@ -1265,6 +1266,7 @@ void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int
 
    Solucao s;
    char arq[50];
+   double bestFOtime = 0;
 
    ler_instancias_TCC(arq, Inst, Vez, instGroup);
    ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
@@ -1273,7 +1275,7 @@ void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int
 
    int qtdVns = (numBer_ * numNav_) * qtd;
 
-   grasp(s, ITmaxTempo, alpha, qtdVns);
+   grasp(s, ITmaxTempo, alpha, qtdVns, bestFOtime);
    // printf("TempSer = %d\n", s.temSer);
 
    // // imprimindo solução
@@ -1285,6 +1287,7 @@ void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int
    // }
   
    escrever_instancias_TCC(arq, Inst, Vez, s.funObj, instGroup, alpha, qtd);
+   escrever_instancias_arquivo_TCC(Inst, Vez, s.funObj, bestFOtime);
    escrever_solucao(s, arq);
 }
 
@@ -1331,6 +1334,20 @@ void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instG
    }
 }
 
+void escrever_instancias_arquivo_TCC(int Inst, int Vez, int funObj, double time)
+{
+
+   FILE *file = fopen(".//parametros_moccia/resultados.csv", "a");  // Abre o arquivo no modo de adição (append)
+   if (file == NULL)
+   {
+      perror("Erro ao abrir o arquivo");
+      return;
+   }
+
+   fprintf(file, "%d,%d,%d,%.6f\n", Inst, Vez, funObj, time);
+
+   fclose(file); // Fecha o arquivo
+}
 
 void ler_instancia_moccia(char *arq)
 {
