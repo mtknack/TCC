@@ -46,9 +46,9 @@ int main()
    // iniciaGrasp(30, 1, 2);
 
    // TESTE MULTIPLO
-   float alpha = 0.6;
-   int qtd = 200;
-   double ITmaxTempo = 120; // segundos
+   float alpha = 0;
+   int qtd = 0;
+   double ITmaxTempo = 2; // segundos
 
    for (int i = 1; i < 6; i++){
       for(int j = 0; j < 4; j++){
@@ -487,7 +487,7 @@ void verificar_solucao(Solucao &s, bool indicador)
          printf("\n>>> SOLUCAO VIAVEL!\n");
       else{
          printf("\n>>> SOLUCAO INVIAVEL!\n");
-         //s.funObj += 10000;
+         s.funObj += 10000;
       }
    } 
 }
