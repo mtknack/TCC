@@ -6,14 +6,13 @@
 
 #include "cbap.hpp"
 
-#define MAX(x,y) (((x) > (y)) ? (x) : (y))
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
 
 char INST[50] = "inst";
 char INST_MOCCIA[50] = "i";
 char INST_CONTINUO[50] = "f";
 int PESO_NAV = 100;
 int PESO_BER = 1000;
-
 
 //------------------------------------------------------------------------------
 int main()
@@ -39,26 +38,26 @@ int main()
    //    printf("\n");
    // }
 
-   
    // TESTE UNICO DE INSTANCIA
    // srand(time(NULL));
    // testaVNS(1, 6);
    // iniciaGrasp(30, 1, 2);
 
    // TESTE MULTIPLO
-   float alpha = 0.2; // Porcentagem de escolha de soluções
-   int qtd = 200; // interações do VNS
+   float alpha = 0.2;       // Porcentagem de escolha de soluções
+   int qtd = 200;           // interações do VNS
    double ITmaxTempo = 120; // segundos
 
-   for (int i = 1; i <= 30; i++){
-      for(int j = 1; j <= 10; j++){
+   for (int i = 1; i <= 30; i++)
+   {
+      for (int j = 1; j <= 10; j++)
+      {
          iniciaGrasp(i, j, ITmaxTempo, alpha, qtd, 2);
       }
    }
 
-
-   //COLETAR DADOS PARA A TABELA DO TRABALHO 2
-   // srand(time(NULL));
+   // COLETAR DADOS PARA A TABELA DO TRABALHO 2
+   //  srand(time(NULL));
 
    // char arq1[50], arq2[50];
    // for (int i = 1; i < 6; i++){
@@ -68,8 +67,6 @@ int main()
    //       printf("inst%d-vez%d MelhorTempFO = %f\n",i,j,tempMelhorSol);
    //    }
    // }
-   
-
 
    //-------------------------
    //--- Coletar tempos da construtiva e c�lculo de FO
@@ -90,22 +87,22 @@ int main()
    printf("Tempo FO: %.5f\n", tempo);*/
    //-------------------------
    //--- Testar entrada
-   //strcpy(arq, "teste.txt");
-   //testar_instancia(arq);
+   // strcpy(arq, "teste.txt");
+   // testar_instancia(arq);
    //-------------------------
    //--- Testar dimens�es dos ber�os
-   //for (int i = 0; i < numBer_; i++)
+   // for (int i = 0; i < numBer_; i++)
    //   printf("%d  -  %d\n", vetPosIniBer_[i], vetPosFinBer_[i]);
    //-------------------------
    //--- Testar ordena��o
-   //for (int i = 0; i < numNav_; i++)
+   // for (int i = 0; i < numNav_; i++)
    //   printf("%d %d\n", vetIndNavOrd_[i]+1, vetHorCheNav_[vetIndNavOrd_[i]]);
    //-------------------------
    //--- Testar leitura de solu��o
-   //sprintf(arq, "%s.sol", INST);
-   //ler_solucao(sol, arq);
-   //strcpy(arq, "");
-   //escrever_solucao(sol, arq);
+   // sprintf(arq, "%s.sol", INST);
+   // ler_solucao(sol, arq);
+   // strcpy(arq, "");
+   // escrever_solucao(sol, arq);
    //-------------------------
 
    return 0;
@@ -115,7 +112,7 @@ int main()
 //------------------------------------------------------------------------------
 void ajustar_hor_pos_berco(Solucao &s, const int &ber)
 {
-   // Quando um ber o for alterado, esse metodo devera  ser chamado para ajustar horario e 
+   // Quando um ber o for alterado, esse metodo devera  ser chamado para ajustar horario e
    // posicao de todos os navios desse berco
    // Usar o inicializar_hor_pos_navios() como base, porem, apenas para o berco ber
    // Se vetTamLEBer_ == 0 ==> posicao e o inicio do berco
@@ -141,32 +138,34 @@ void ajustar_hor_pos_berco(Solucao &s, const int &ber)
          sob_esq = true;
 
          bool precisa_esq = true, precisa_dir = true;
-         
-         if(vetTamLDBer_[ber] == 0){ // lado direto do berco for 0
+
+         if (vetTamLDBer_[ber] == 0)
+         { // lado direto do berco for 0
             s.vetPosAtrNav[n1] = vetPosFinBer_[ber] - vetTamNav_[n1];
             s.vetPosFinNav[n1] = vetPosFinBer_[ber];
-            if(ber == (numBer_-1))
+            if (ber == (numBer_ - 1))
                precisa_dir = false;
          }
-         else if (vetTamLEBer_[ber] == 0){
-            if(ber == 0)
-            precisa_esq = false;
+         else if (vetTamLEBer_[ber] == 0)
+         {
+            if (ber == 0)
+               precisa_esq = false;
          }
-                     
+
          while (sob_esq || sob_dir)
          {
             sob_esq = false;
             sob_dir = false;
-            if(precisa_esq){
-               for (int k = 0; k < s.vetQtdNavBer[ber-1]; k++) //Checar sobreposicao com os navios do berco anterior
+            if (precisa_esq)
+            {
+               for (int k = 0; k < s.vetQtdNavBer[ber - 1]; k++) // Checar sobreposicao com os navios do berco anterior
                {
-                  n2 = s.matSol[ber-1][k];
+                  n2 = s.matSol[ber - 1][k];
                   if (navios_sobrepostos(s, n1, n2))
                   {
                      sob_esq = true;
                      break;
                   }
-                  
                }
                if (sob_esq)
                {
@@ -184,17 +183,19 @@ void ajustar_hor_pos_berco(Solucao &s, const int &ber)
                   }
                }
             }
-            if (precisa_dir){
-               for (int k = 0; k < s.vetQtdNavBer[ber+1]; k++)
+            if (precisa_dir)
+            {
+               for (int k = 0; k < s.vetQtdNavBer[ber + 1]; k++)
                {
-                  n3 = s.matSol[ber+1][k];
+                  n3 = s.matSol[ber + 1][k];
                   if (navios_sobrepostos(s, n1, n3))
                   {
                      sob_dir = true;
                      break;
                   }
-               } //Checar sobreposicao com os navios do berco posterior
-               if(sob_dir){
+               } // Checar sobreposicao com os navios do berco posterior
+               if (sob_dir)
+               {
                   s.vetHorAtrNav[n1] = s.vetHorSaiNav[n3];
                   s.vetHorSaiNav[n1] = s.vetHorAtrNav[n1] + matTemAte_[ber][n1];
                   s.vetPosAtrNav[n1] = vetPosIniBer_[ber];
@@ -208,29 +209,35 @@ void ajustar_hor_pos_berco(Solucao &s, const int &ber)
 }
 
 //------------------------------------------------------------------------------
-void ordenar_nav_hor_che(Solucao &s,int ber){
+void ordenar_nav_hor_che(Solucao &s, int ber)
+{
    int aux;
    int vetNavOrdNoBer[MAX_NAV];
    int vetCheNavOrdNoBer[MAX_NAV];
-   for (int i = 0; i < s.vetQtdNavBer[ber]; i++){//Copia
+   for (int i = 0; i < s.vetQtdNavBer[ber]; i++)
+   { // Copia
       vetNavOrdNoBer[i] = s.matSol[ber][i];
       vetCheNavOrdNoBer[i] = vetHorCheNav_[s.matSol[ber][i]];
    }
-   for (int i = 1; i < s.vetQtdNavBer[ber]; i++){ //Ordena
-      for (int j = 0; j < s.vetQtdNavBer[ber]-i; j++){
-         if (vetCheNavOrdNoBer[j] > vetCheNavOrdNoBer[j+1]){
+   for (int i = 1; i < s.vetQtdNavBer[ber]; i++)
+   { // Ordena
+      for (int j = 0; j < s.vetQtdNavBer[ber] - i; j++)
+      {
+         if (vetCheNavOrdNoBer[j] > vetCheNavOrdNoBer[j + 1])
+         {
             aux = vetCheNavOrdNoBer[j];
-            vetCheNavOrdNoBer[j] = vetCheNavOrdNoBer[j+1];
-            vetCheNavOrdNoBer[j+1] = aux;
-            
+            vetCheNavOrdNoBer[j] = vetCheNavOrdNoBer[j + 1];
+            vetCheNavOrdNoBer[j + 1] = aux;
+
             aux = vetNavOrdNoBer[j];
-            vetNavOrdNoBer[j] = vetNavOrdNoBer[j+1];
-            vetNavOrdNoBer[j+1] = aux;
+            vetNavOrdNoBer[j] = vetNavOrdNoBer[j + 1];
+            vetNavOrdNoBer[j + 1] = aux;
          }
       }
    }
 
-   for (int i = 0; i < s.vetQtdNavBer[ber]; i++){ //Atribui
+   for (int i = 0; i < s.vetQtdNavBer[ber]; i++)
+   { // Atribui
       s.matSol[ber][i] = vetNavOrdNoBer[i];
    }
 }
@@ -281,17 +288,16 @@ void criar_solucao(Solucao &s)
       }
    }
    for (int i = 0; i < numBer_; i++)
-      if(s.vetQtdNavBer[i] >= s.maiorQtdNavBer)
+      if (s.vetQtdNavBer[i] >= s.maiorQtdNavBer)
          s.maiorQtdNavBer = s.vetQtdNavBer[i];
 
-   
    inicializar_hor_pos_navios(s);
 }
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 void inicializar_hor_pos_navios(Solucao &s)
-{  
+{
    // 1 - cabe no berco esq e dir
    //    1.1 - aloca PosIni ber = final do ber-1 e PosFinal ber = final do ber-1 + tamNav
    //    1.2 - repete tudo
@@ -321,9 +327,9 @@ void inicializar_hor_pos_navios(Solucao &s)
                while (sob_esq)
                {
                   sob_esq = false;
-                  for (int k = 0; k < s.vetQtdNavBer[i-1]; k++) //Checar sobreposicao com os navios do berco anterior
+                  for (int k = 0; k < s.vetQtdNavBer[i - 1]; k++) // Checar sobreposicao com os navios do berco anterior
                   {
-                     n2 = s.matSol[i-1][k];
+                     n2 = s.matSol[i - 1][k];
                      if (navios_sobrepostos(s, n1, n2))
                      {
                         sob_esq = true;
@@ -355,10 +361,10 @@ void inicializar_hor_pos_navios(Solucao &s)
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-bool  navios_sobrepostos(Solucao &s, const int &n1, const int &n2)
+bool navios_sobrepostos(Solucao &s, const int &n1, const int &n2)
 {
    if ((s.vetPosAtrNav[n1] < s.vetPosFinNav[n2]) && (s.vetPosFinNav[n1] > s.vetPosAtrNav[n2]) &&
-      (s.vetHorAtrNav[n1] < s.vetHorSaiNav[n2]) && (s.vetHorSaiNav[n1] > s.vetHorAtrNav[n2]))
+       (s.vetHorAtrNav[n1] < s.vetHorSaiNav[n2]) && (s.vetHorSaiNav[n1] > s.vetHorAtrNav[n2]))
       return true;
    return false;
 }
@@ -367,14 +373,15 @@ bool  navios_sobrepostos(Solucao &s, const int &n1, const int &n2)
 //------------------------------------------------------------------------------
 void verificar_solucao(Solucao &s, bool indicador)
 {
-   if(indicador){
+   if (indicador)
+   {
       printf("\n\n>>> VERIFICACAO DA SOLUCAO <<<\n");
    }
    bool viavel = true;
    //--- Verificar se todos os navios foram atendidos uma �nica vez
    int aux, vetAux[MAX_NAV];
    memset(&vetAux, 0, sizeof(vetAux));
-   for(int i = 0; i < numBer_; i++)
+   for (int i = 0; i < numBer_; i++)
       for (int j = 0; j < s.vetQtdNavBer[i]; j++)
       {
          aux = s.matSol[i][j];
@@ -382,12 +389,12 @@ void verificar_solucao(Solucao &s, bool indicador)
       }
    aux = 0;
    for (int i = 0; i < numNav_; i++)
-	   if (vetAux[i] != 1)
-   	{
-      printf(">>> Ha navios nao atendidos ou atendidos mais de uma vez!\n");
-      viavel = false;
-      break;
-   }
+      if (vetAux[i] != 1)
+      {
+         printf(">>> Ha navios nao atendidos ou atendidos mais de uma vez!\n");
+         viavel = false;
+         break;
+      }
    //-------------------------
    //--- Verificar se h� navios atracando em ber�os que n�o podem atend�-los
    for (int i = 0; i < numNav_; i++)
@@ -450,22 +457,24 @@ void verificar_solucao(Solucao &s, bool indicador)
    for (int i = 0; i < numNav_; i++)
       for (int j = 0; j < numNav_; j++)
          if (j != i)
-            if(navios_sobrepostos(s, i, j))
+            if (navios_sobrepostos(s, i, j))
             {
                printf(">>> Ha navios sobrepostos!\n");
                viavel = false;
                goto FIM;
             }
-   //-------------------------
-   FIM : ;
-   if(indicador){
+//-------------------------
+FIM:;
+   if (indicador)
+   {
       if (viavel)
          printf("\n>>> SOLUCAO VIAVEL!\n");
-      else{
+      else
+      {
          printf("\n>>> SOLUCAO INVIAVEL!\n");
-         //s.funObj += 10000;
+         // s.funObj += 10000;
       }
-   } 
+   }
 }
 //------------------------------------------------------------------------------
 
@@ -474,7 +483,7 @@ void ler_solucao(Solucao &s, char *arq)
 {
    char aux[30];
    int fo, temSer;
-   FILE* f = fopen(arq, "r");
+   FILE *f = fopen(arq, "r");
    fscanf(f, "%s %d\n", &aux, &fo);
    fscanf(f, "%s %s %s %d\n", &aux, &aux, &aux, &temSer);
    fscanf(f, "%s %s %s %s %s\n", &aux, &aux, &aux, &aux, &aux);
@@ -515,7 +524,7 @@ void ler_solucao(Solucao &s, char *arq)
 //------------------------------------------------------------------------------
 void escrever_solucao(Solucao &s, char *arq)
 {
-   FILE* f;
+   FILE *f;
    if (strcmp(arq, "") == 0)
       f = stdout;
    else
@@ -525,11 +534,11 @@ void escrever_solucao(Solucao &s, char *arq)
    fprintf(f, "--------------------------\n");
    fprintf(f, "Navio\tBerco\tTempo\tPosicao\n");
    for (int i = 0; i < numNav_; i++)
-      fprintf(f, "%d\t%d\t%d\t%d\n", i+1, s.vetIdBerNav[i]+1, s.vetHorAtrNav[i], s.vetPosAtrNav[i]);
+      fprintf(f, "%d\t%d\t%d\t%d\n", i + 1, s.vetIdBerNav[i] + 1, s.vetHorAtrNav[i], s.vetPosAtrNav[i]);
    fprintf(f, "\nMATRIZ DE SOLUCAO\n");
    for (int i = 0; i < numBer_; i++)
    {
-      fprintf(f, "B%d: ", i+1);
+      fprintf(f, "B%d: ", i + 1);
       for (int j = 0; j < s.vetQtdNavBer[i]; j++)
          fprintf(f, "%d  ", s.matSol[i][j] + 1);
       fprintf(f, "\n");
@@ -540,7 +549,7 @@ void escrever_solucao(Solucao &s, char *arq)
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-void clonar_solucao(Solucao &o, Solucao &c) 
+void clonar_solucao(Solucao &o, Solucao &c)
 {
    memcpy(&c, &o, sizeof(o));
 }
@@ -573,7 +582,7 @@ void ordenar_navios(int *vetInd, int *vetVal)
 //------------------------------------------------------------------------------
 void testar_instancia(char *arq)
 {
-   FILE* f = fopen(arq, "w");
+   FILE *f = fopen(arq, "w");
    fprintf(f, "%d\t%d\n\n", numNav_, numBer_);
    for (int i = 0; i < numNav_; i++)
       fprintf(f, "%d\t", vetTamNav_[i]);
@@ -607,11 +616,11 @@ void atualizar_dimensoes_bercos()
    vetPosFinBer_[0] = vetTamLEBer_[0] + vetTamLDBer_[0] + vetTamLEBer_[1];
    for (int i = 1; i < numBer_; i++)
    {
-      vetPosIniBer_[i] = vetPosFinBer_[i-1] - vetTamLEBer_[i];
+      vetPosIniBer_[i] = vetPosFinBer_[i - 1] - vetTamLEBer_[i];
       vetPosFinBer_[i] = vetPosIniBer_[i] + vetTamLEBer_[i] + vetTamLDBer_[i];
-      vetPosIniBer_[i] -= vetTamLDBer_[i-1];
-      if (i != numBer_ -1)
-         vetPosFinBer_[i] += vetTamLEBer_[i+1];
+      vetPosIniBer_[i] -= vetTamLDBer_[i - 1];
+      if (i != numBer_ - 1)
+         vetPosFinBer_[i] += vetTamLEBer_[i + 1];
    }
    for (int i = 0; i < numBer_; i++)
       for (int j = 0; j < numNav_; j++)
@@ -623,8 +632,8 @@ void atualizar_dimensoes_bercos()
 //------------------------------------------------------------------------------
 void ler_instancia(char *arq)
 {
-   FILE *f = fopen(arq,"r");
-   fscanf(f,"%d\t%d\n", &numNav_, &numBer_);
+   FILE *f = fopen(arq, "r");
+   fscanf(f, "%d\t%d\n", &numNav_, &numBer_);
    for (int i = 0; i < numNav_; i++)
       fscanf(f, "%d", &vetTamNav_[i]);
    for (int i = 0; i < numNav_; i++)
@@ -646,21 +655,24 @@ void ler_instancia(char *arq)
 
 // novo ------------------------------------------------------------------------
 
-void testaVNS(int Inst, int Vez){
+void testaVNS(int Inst, int Vez)
+{
    // --------------------- Inicializando padrão ----------------------- //
    Solucao s;
    clock_t h;
    h = clock();
 
    double tempo;
-   
-   for (int j = 0; j < numBer_; j++){
-      for (int i = 0; i < numNav_; i++){
+
+   for (int j = 0; j < numBer_; j++)
+   {
+      for (int i = 0; i < numNav_; i++)
+      {
          s.matSol[j][i] = -1;
       }
       printf("\n");
    }
-   
+
    char arq[50];
    sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
    ler_instancia(arq);
@@ -679,45 +691,50 @@ void testaVNS(int Inst, int Vez){
    //    printf("\n");
    //    printf("%d\n", s.vetQtdNavBer[j]);
    // }
-   
+
    printf("Primeira FO = %d\n", s.funObj);
    printf("TempSer = %d\n", s.temSer);
 
-   double ITmaxTempo = 60;//Segundos
+   double ITmaxTempo = 60; // Segundos
    int qtd = -1;
    int qViz = 3;
-   // VNS(s, ITmaxTempo, qViz, qtd); 
+   // VNS(s, ITmaxTempo, qViz, qtd);
    calc_fo(s);
-   h = clock() - h; 
-   tempo = (double)h/CLOCKS_PER_SEC;
+   h = clock() - h;
+   tempo = (double)h / CLOCKS_PER_SEC;
    verificar_solucao(s, false);
    printf("MelFO = %d\n", s.funObj);
    printf("TempSer = %d\n", s.temSer);
    printf("Tempo = %lf\n", tempo);
 
-   for (int j = 0; j < numBer_; j++){
-      for (int i = 0; i < s.maiorQtdNavBer; i++){
+   for (int j = 0; j < numBer_; j++)
+   {
+      for (int i = 0; i < s.maiorQtdNavBer; i++)
+      {
          printf("%d - ", s.matSol[j][i]);
       }
       printf("\n");
    }
-  
+
    sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, s.funObj);
    escrever_solucao(s, arq);
 }
 
-void VNS(Solucao &S, int qViz, int qtd){
+void VNS(Solucao &S, int qViz, int qtd)
+{
    Solucao S1;
    int i = 0, k = 1;
-   
-   clonar_solucao(S,S1);
+
+   clonar_solucao(S, S1);
    // printarDadosSolucao(S1);
-   while(i <= qtd){
+   while (i <= qtd)
+   {
       ++i;
 
-      switch (k){
+      switch (k)
+      {
       case 1:
-         gerarViz1(S1,true);
+         gerarViz1(S1, true);
          break;
       case 2:
          gerarViz2(S1);
@@ -731,15 +748,21 @@ void VNS(Solucao &S, int qViz, int qtd){
       }
 
       // heuBLPM(S1); // Busca local primeira melhora
-      if(S1.funObj < S.funObj){ // para maximizar use ">", para minimizar use "<"
-         clonar_solucao(S1,S);
+      if (S1.funObj < S.funObj)
+      { // para maximizar use ">", para minimizar use "<"
+         clonar_solucao(S1, S);
          k = 1;
-      }else{
-         clonar_solucao(S,S1);
+      }
+      else
+      {
+         clonar_solucao(S, S1);
 
-         if(k < qViz){
+         if (k < qViz)
+         {
             k++;
-         } else {
+         }
+         else
+         {
             k = 1;
          }
       }
@@ -748,105 +771,123 @@ void VNS(Solucao &S, int qViz, int qtd){
    }
 }
 
+void gerarViz1(Solucao &S, bool att)
+{
+   int nav1, nav2, ber1, ber2, camada1, camada2, teste = true;
 
-void gerarViz1(Solucao &S,bool att){
-	int nav1, nav2, ber1, ber2, camada1, camada2, teste = true;
+   while (teste)
+   {
+      ber1 = rand() % (numBer_);
+      ber2 = rand() % (numBer_);
 
-	while(teste){
-      ber1 = rand()%(numBer_);
-		ber2 = rand()%(numBer_);
-
-      if(S.vetQtdNavBer[ber1] > 0){
-         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+      if (S.vetQtdNavBer[ber1] > 0)
+      {
+         camada1 = (rand() % (S.vetQtdNavBer[ber1]));
       }
-      else{
-         while (S.vetQtdNavBer[ber1] == 0){
-            ber1 = rand()%(numBer_);
+      else
+      {
+         while (S.vetQtdNavBer[ber1] == 0)
+         {
+            ber1 = rand() % (numBer_);
          }
-         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+         camada1 = (rand() % (S.vetQtdNavBer[ber1]));
       }
 
-		if(S.vetQtdNavBer[ber2] > 0){
-         camada2 = (rand()%(S.vetQtdNavBer[ber2]));
+      if (S.vetQtdNavBer[ber2] > 0)
+      {
+         camada2 = (rand() % (S.vetQtdNavBer[ber2]));
       }
-      else{
-         while (S.vetQtdNavBer[ber2] == 0){
-            ber2 = rand()%(numBer_);
+      else
+      {
+         while (S.vetQtdNavBer[ber2] == 0)
+         {
+            ber2 = rand() % (numBer_);
          }
-         camada2 = (rand()%(S.vetQtdNavBer[ber2]));
+         camada2 = (rand() % (S.vetQtdNavBer[ber2]));
       }
-		
 
       nav1 = S.matSol[ber1][camada1];
       nav2 = S.matSol[ber2][camada2];
 
-      if(nav1 != nav2 && (nav1 != -1 || nav2 != -1) && (matTemAte_[ber1][nav2] != 0 && matTemAte_[ber2][nav1] != 0)){//(nav1 != -1 || nav2 != -1)
+      if (nav1 != nav2 && (nav1 != -1 || nav2 != -1) && (matTemAte_[ber1][nav2] != 0 && matTemAte_[ber2][nav1] != 0))
+      { //(nav1 != -1 || nav2 != -1)
          teste = false;
       }
-	}
+   }
 
-	S.matSol[ber1][camada1] = nav2;
-	S.matSol[ber2][camada2] = nav1;
+   S.matSol[ber1][camada1] = nav2;
+   S.matSol[ber2][camada2] = nav1;
 
    S.vetIdBerNav[nav2] = ber1;
    S.vetIdBerNav[nav1] = ber2;
 
-   if(att){
-      if (ber1 < ber2){
-         ajustar_hor_pos_berco(S,ber1);
-         ajustar_hor_pos_berco(S,ber2);
-         
-      }else{
-         ajustar_hor_pos_berco(S,ber2);
-         ajustar_hor_pos_berco(S,ber1);
+   if (att)
+   {
+      if (ber1 < ber2)
+      {
+         ajustar_hor_pos_berco(S, ber1);
+         ajustar_hor_pos_berco(S, ber2);
+      }
+      else
+      {
+         ajustar_hor_pos_berco(S, ber2);
+         ajustar_hor_pos_berco(S, ber1);
       }
    }
-   
+
    calc_fo(S);
 }
 
+void gerarViz2(Solucao &S)
+{ // Troca somente um navio de berco aleatório
+   int nav1, ber1, ber2, camada1, teste = true;
 
-void gerarViz2(Solucao &S){ //Troca somente um navio de berco aleatório
-	int nav1, ber1, ber2, camada1, teste = true;
+   while (teste)
+   {
+      ber1 = rand() % (numBer_);
 
-	while(teste){
-      ber1 = rand()%(numBer_);
-
-      if(S.vetQtdNavBer[ber1] > 0){
-         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+      if (S.vetQtdNavBer[ber1] > 0)
+      {
+         camada1 = (rand() % (S.vetQtdNavBer[ber1]));
       }
-      else{
-         while (S.vetQtdNavBer[ber1] == 0){
-            ber1 = rand()%(numBer_);
+      else
+      {
+         while (S.vetQtdNavBer[ber1] == 0)
+         {
+            ber1 = rand() % (numBer_);
          }
-         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+         camada1 = (rand() % (S.vetQtdNavBer[ber1]));
       }
 
-		
       nav1 = S.matSol[ber1][camada1];
 
-		ber2 = rand()%(numBer_); //berco destino
+      ber2 = rand() % (numBer_); // berco destino
 
-      if(matTemAte_[ber2][nav1] != 0){
+      if (matTemAte_[ber2][nav1] != 0)
+      {
          teste = false;
       }
-	}
+   }
 
-   for (int z = camada1; z < S.vetQtdNavBer[ber1]; z++){
-      S.matSol[ber1][z] = S.matSol[ber1][z+1];
+   for (int z = camada1; z < S.vetQtdNavBer[ber1]; z++)
+   {
+      S.matSol[ber1][z] = S.matSol[ber1][z + 1];
    }
    S.vetQtdNavBer[ber1]--;
 
-	S.matSol[ber2][S.vetQtdNavBer[ber2]] = nav1;
+   S.matSol[ber2][S.vetQtdNavBer[ber2]] = nav1;
    S.vetQtdNavBer[ber2]++;
 
    S.vetIdBerNav[nav1] = ber2;
-   if (ber1 < ber2){
-      ajustar_hor_pos_berco(S,ber1);
-      ajustar_hor_pos_berco(S,ber2);
-   }else{
-      ajustar_hor_pos_berco(S,ber2);
-      ajustar_hor_pos_berco(S,ber1);
+   if (ber1 < ber2)
+   {
+      ajustar_hor_pos_berco(S, ber1);
+      ajustar_hor_pos_berco(S, ber2);
+   }
+   else
+   {
+      ajustar_hor_pos_berco(S, ber2);
+      ajustar_hor_pos_berco(S, ber1);
    }
 
    calc_fo(S);
@@ -855,61 +896,71 @@ void gerarViz2(Solucao &S){ //Troca somente um navio de berco aleatório
 void heuBLPM(Solucao &s) // Heuristica primeira melhora
 {
    Solucao s1;
-   clonar_solucao(s,s1);
-	//int vetObjAux[MAX_NAV]; // usado para evitar determinismo na ordem de teste dos objetos
-   // for(int ber1 = 0; j < numNav_; j++)
-   //    vetObjAux[j] = j;
+   clonar_solucao(s, s1);
+   // int vetObjAux[MAX_NAV]; // usado para evitar determinismo na ordem de teste dos objetos
+   //  for(int ber1 = 0; j < numNav_; j++)
+   //     vetObjAux[j] = j;
 
-   INICIO: ;
-   
-   for(int j = 0; j < numBer_; j++){
-      for (int k = 0; k < s1.vetQtdNavBer[j]; k++){
-         for(int i = 0; i < numBer_; i++){
+INICIO:;
+
+   for (int j = 0; j < numBer_; j++)
+   {
+      for (int k = 0; k < s1.vetQtdNavBer[j]; k++)
+      {
+         for (int i = 0; i < numBer_; i++)
+         {
             int nav = s1.matSol[j][k];
-            if ((i == j) || matTemAte_[i][nav]==0){
+            if ((i == j) || matTemAte_[i][nav] == 0)
+            {
                continue;
             }
 
-            for (int z = k; z < s1.vetQtdNavBer[j]; z++){
-               s1.matSol[j][z] = s1.matSol[j][z+1];
+            for (int z = k; z < s1.vetQtdNavBer[j]; z++)
+            {
+               s1.matSol[j][z] = s1.matSol[j][z + 1];
             }
             s1.vetQtdNavBer[j]--;
-            s1.matSol[i][s1.vetQtdNavBer[i]] = nav; 
+            s1.matSol[i][s1.vetQtdNavBer[i]] = nav;
             s1.vetQtdNavBer[i]++;
             s1.vetIdBerNav[nav] = i;
-            
-            //inicializar_hor_pos_navios(s1); 
-            if (j < i){
-               ajustar_hor_pos_berco(s1,j);
-               ajustar_hor_pos_berco(s1,i);
-            }else{
-               ajustar_hor_pos_berco(s1,i);
-               ajustar_hor_pos_berco(s1,j);   
+
+            // inicializar_hor_pos_navios(s1);
+            if (j < i)
+            {
+               ajustar_hor_pos_berco(s1, j);
+               ajustar_hor_pos_berco(s1, i);
             }
-            
+            else
+            {
+               ajustar_hor_pos_berco(s1, i);
+               ajustar_hor_pos_berco(s1, j);
+            }
+
             calc_fo(s1);
 
-            if(s1.funObj < s.funObj){
-               clonar_solucao(s1,s);
+            if (s1.funObj < s.funObj)
+            {
+               clonar_solucao(s1, s);
                goto INICIO;
-               
             }
-            else{
-               clonar_solucao(s,s1);
+            else
+            {
+               clonar_solucao(s, s1);
             }
          }
       }
    }
 }
 
-
-void gerarViz3(Solucao &S){ // troca dois navios numBer_ vezes sucessivamente
+void gerarViz3(Solucao &S)
+{ // troca dois navios numBer_ vezes sucessivamente
 
    int nav1, nav2, ber1, ber2, camada1, camada2, teste = true, roda = 0;
 
-   while (numBer_ > roda){
+   while (numBer_ > roda)
+   {
 
-      gerarViz1(S,false);
+      gerarViz1(S, false);
       roda++;
    }
 
@@ -917,28 +968,32 @@ void gerarViz3(Solucao &S){ // troca dois navios numBer_ vezes sucessivamente
    calc_fo(S);
 }
 
-void gerarViz4(Solucao &S){ //Troca somente um navio de berco aleatório varias vezes
-	int nav1, ber1, ber2, camada1, roda = 0, teste = true;
+void gerarViz4(Solucao &S)
+{ // Troca somente um navio de berco aleatório varias vezes
+   int nav1, ber1, ber2, camada1, roda = 0, teste = true;
 
-   while (numBer_ >= roda){
+   while (numBer_ >= roda)
+   {
       teste = true;
-      while(teste){
-         ber1 = rand()%(numBer_);
-         camada1 = (rand()%(S.vetQtdNavBer[ber1]));
+      while (teste)
+      {
+         ber1 = rand() % (numBer_);
+         camada1 = (rand() % (S.vetQtdNavBer[ber1]));
          nav1 = S.matSol[ber1][camada1];
 
-         ber2 = rand()%(numBer_); // berco destino
+         ber2 = rand() % (numBer_); // berco destino
 
-         if(matTemAte_[ber2][nav1] != 0){
+         if (matTemAte_[ber2][nav1] != 0)
+         {
             teste = false;
          }
       }
 
-      for (int z = camada1; z < S.vetQtdNavBer[ber1]; z++){
-         S.matSol[ber1][z] = S.matSol[ber1][z+1];
+      for (int z = camada1; z < S.vetQtdNavBer[ber1]; z++)
+      {
+         S.matSol[ber1][z] = S.matSol[ber1][z + 1];
       }
       S.vetQtdNavBer[ber1]--;
-      
 
       S.matSol[ber2][S.vetQtdNavBer[ber2]] = nav1;
       S.vetQtdNavBer[ber2]++;
@@ -971,7 +1026,8 @@ void criar_solucao_por_tamanho(Solucao &s, float alpha)
       {
          aux = verificaMenorTempoBer(s, nav, alpha);
          // int temp = 0;
-         while (matTemAte_[aux][nav] == 0){
+         while (matTemAte_[aux][nav] == 0)
+         {
             aux = verificaMenorTempoBer(s, nav, alpha);
             // temp++;
             // if(temp == 3){
@@ -979,9 +1035,9 @@ void criar_solucao_por_tamanho(Solucao &s, float alpha)
             //    break;
             // }
          }
-         
+
          // printf("ber escolhido - %d   matTemAte_[ber][nav] %d\n", ber, matTemAte_[ber][nav]);
-            
+
          s.matSol[aux][s.vetQtdNavBer[aux]] = nav;
          s.vetIdBerNav[nav] = aux;
          s.vetQtdNavBer[aux]++;
@@ -999,23 +1055,26 @@ void criar_solucao_por_tamanho(Solucao &s, float alpha)
       inicializar_hor_pos_navios(s);
    }
    for (int i = 0; i < numBer_; i++)
-      if(s.vetQtdNavBer[i] >= s.maiorQtdNavBer)
+      if (s.vetQtdNavBer[i] >= s.maiorQtdNavBer)
          s.maiorQtdNavBer = s.vetQtdNavBer[i];
-
-   
 }
 
-void descobre_tam_total_dos_bercos(){
-   for (int i = 0; i < numBer_; i++){
+void descobre_tam_total_dos_bercos()
+{
+   for (int i = 0; i < numBer_; i++)
+   {
 
       vetTamTotalBer_[i] = vetTamLEBer_[i] + vetTamLDBer_[i];
-      if( i != 0 && vetTamLDBer_[i-1] != 0 ){
-         vetTamTotalBer_[i] += vetTamLDBer_[i-1];
-      } else if( i != numBer_ && vetTamLEBer_[i+1] != 0){
-         vetTamTotalBer_[i] += vetTamLEBer_[i+1];
+      if (i != 0 && vetTamLDBer_[i - 1] != 0)
+      {
+         vetTamTotalBer_[i] += vetTamLDBer_[i - 1];
+      }
+      else if (i != numBer_ && vetTamLEBer_[i + 1] != 0)
+      {
+         vetTamTotalBer_[i] += vetTamLEBer_[i + 1];
       }
 
-      vetIdBerOrdTamTotal_[i] = i; // somente para preencher o vetor com os ids
+      vetIdBerOrdTamTotal_[i] = i;  // somente para preencher o vetor com os ids
       vetIdBercoMelhorTemp_[i] = i; // somente para preencher o vetor com os ids
    }
 
@@ -1041,14 +1100,17 @@ void descobre_tam_total_dos_bercos(){
    // {
    //    printf("%d - ", vetIdBerOrdTamTotal_[i]);
    // }
-   
 }
 
-void ordernar_berco_asc(){
+void ordernar_berco_asc()
+{
    int auxTam, auxId;
-   for (int i = 0; i < (numBer_ - 1); i++){
-      for (int j = i; j < (numBer_); j++){
-         if(vetTamTotalBer_[i] > vetTamTotalBer_[j]){
+   for (int i = 0; i < (numBer_ - 1); i++)
+   {
+      for (int j = i; j < (numBer_); j++)
+      {
+         if (vetTamTotalBer_[i] > vetTamTotalBer_[j])
+         {
             auxTam = vetTamTotalBer_[i];
             vetTamTotalBer_[i] = vetTamTotalBer_[j];
             vetTamTotalBer_[j] = auxTam;
@@ -1061,8 +1123,9 @@ void ordernar_berco_asc(){
    }
 }
 
-int verificaMenorTempoBer(Solucao &s, int nav, float alpha){
-   
+int verificaMenorTempoBer(Solucao &s, int nav, float alpha)
+{
+
    int n = numBer_; // para não modificar o valor de numBer_
    int auxId, auxTam, vetAuxTemp[MAX_BER], vetAuxIdBerco[MAX_BER];
    memcpy(&vetAuxTemp, &s.vetHorAlocProxNav, sizeof(s.vetHorAlocProxNav));
@@ -1070,11 +1133,14 @@ int verificaMenorTempoBer(Solucao &s, int nav, float alpha){
 
    // printf("nav %d\n", nav);
 
-   for (int i = 0; i < (n - 1); i++){
+   for (int i = 0; i < (n - 1); i++)
+   {
       // printf("ber - %d   matTemAte_[ber][nav] %d\n i = %d j = %d vetAuxIdBerco[i] = %d\n", i, matTemAte_[vetAuxIdBerco[i]][nav]);
-      for (int j = i; j < (n); j++){
+      for (int j = i; j < (n); j++)
+      {
 
-         if(matTemAte_[vetAuxIdBerco[i]][nav] == 0){
+         if (matTemAte_[vetAuxIdBerco[i]][nav] == 0)
+         {
             auxId = vetAuxIdBerco[n - 1];
             vetAuxIdBerco[n - 1] = vetAuxIdBerco[i];
             vetAuxIdBerco[i] = auxId;
@@ -1086,7 +1152,8 @@ int verificaMenorTempoBer(Solucao &s, int nav, float alpha){
             i--;
             break;
          }
-         else if(matTemAte_[vetAuxIdBerco[j]][nav] == 0){
+         else if (matTemAte_[vetAuxIdBerco[j]][nav] == 0)
+         {
             auxId = vetAuxIdBerco[n - 1];
             vetAuxIdBerco[n - 1] = vetAuxIdBerco[j];
             vetAuxIdBerco[j] = auxId;
@@ -1097,9 +1164,9 @@ int verificaMenorTempoBer(Solucao &s, int nav, float alpha){
             n--;
             j--;
          }
-         else if(
-            vetAuxTemp[i] + matTemAte_[vetAuxIdBerco[i]][nav] > vetAuxTemp[j] + matTemAte_[vetAuxIdBerco[j]][nav]
-         ){
+         else if (
+             vetAuxTemp[i] + matTemAte_[vetAuxIdBerco[i]][nav] > vetAuxTemp[j] + matTemAte_[vetAuxIdBerco[j]][nav])
+         {
             // printf("%d + %d > %d + %d\n", vetAuxTemp[i], matTemAte_[i][nav], vetAuxTemp[j], matTemAte_[j][nav]);
             auxId = vetAuxIdBerco[i];
             vetAuxIdBerco[i] = vetAuxIdBerco[j];
@@ -1119,91 +1186,104 @@ int verificaMenorTempoBer(Solucao &s, int nav, float alpha){
    // }
    // printf("\n");
 
-   int porcentagemBercos = (int) floor(numBer_ * alpha);
-   if(porcentagemBercos == 0){
+   int porcentagemBercos = (int)floor(numBer_ * alpha);
+   if (porcentagemBercos == 0)
+   {
       porcentagemBercos += 1;
    }
-   
-   return vetAuxIdBerco[ rand() % porcentagemBercos];
+
+   return vetAuxIdBerco[rand() % porcentagemBercos];
    // return vetAuxIdBerco[0];
 }
 
 // Função para mesclar dois subvetores de vetAuxTemp e vetAuxIdBerco[]
-void merge(int arr[], int aux[], int left, int middle, int right) {
-    int i, j, k;
-    int n1 = middle - left + 1;
-    int n2 = right - middle;
+void merge(int arr[], int aux[], int left, int middle, int right)
+{
+   int i, j, k;
+   int n1 = middle - left + 1;
+   int n2 = right - middle;
 
-    // Cria vetores temporários
-    int L[n1], R[n2];
-    int L_id[n1], R_id[n2];
+   // Cria vetores temporários
+   int L[n1], R[n2];
+   int L_id[n1], R_id[n2];
 
-    // Copia os dados para os vetores temporários L[] e R[]
-    for (i = 0; i < n1; i++) {
-        L[i] = arr[left + i];
-        L_id[i] = aux[left + i];
-    }
-    for (j = 0; j < n2; j++) {
-        R[j] = arr[middle + 1 + j];
-        R_id[j] = aux[middle + 1 + j];
-    }
+   // Copia os dados para os vetores temporários L[] e R[]
+   for (i = 0; i < n1; i++)
+   {
+      L[i] = arr[left + i];
+      L_id[i] = aux[left + i];
+   }
+   for (j = 0; j < n2; j++)
+   {
+      R[j] = arr[middle + 1 + j];
+      R_id[j] = aux[middle + 1 + j];
+   }
 
-    // Mescla os vetores temporários de volta para arr[]
-    i = 0;
-    j = 0;
-    k = left;
-    while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k] = L[i];
-            aux[k] = L_id[i];
-            i++;
-        } else {
-            arr[k] = R[j];
-            aux[k] = R_id[j];
-            j++;
-        }
-        k++;
-    }
+   // Mescla os vetores temporários de volta para arr[]
+   i = 0;
+   j = 0;
+   k = left;
+   while (i < n1 && j < n2)
+   {
+      if (L[i] <= R[j])
+      {
+         arr[k] = L[i];
+         aux[k] = L_id[i];
+         i++;
+      }
+      else
+      {
+         arr[k] = R[j];
+         aux[k] = R_id[j];
+         j++;
+      }
+      k++;
+   }
 
-    // Copia os elementos restantes de L[], se houver algum
-    while (i < n1) {
-        arr[k] = L[i];
-        aux[k] = L_id[i];
-        i++;
-        k++;
-    }
+   // Copia os elementos restantes de L[], se houver algum
+   while (i < n1)
+   {
+      arr[k] = L[i];
+      aux[k] = L_id[i];
+      i++;
+      k++;
+   }
 
-    // Copia os elementos restantes de R[], se houver algum
-    while (j < n2) {
-        arr[k] = R[j];
-        aux[k] = R_id[j];
-        j++;
-        k++;
-    }
+   // Copia os elementos restantes de R[], se houver algum
+   while (j < n2)
+   {
+      arr[k] = R[j];
+      aux[k] = R_id[j];
+      j++;
+      k++;
+   }
 }
 
 // Função principal do Merge Sort
-void mergeSort(int arr[], int aux[], int left, int right) {
-    if (left < right) {
-        // Encontra o ponto médio
-        int middle = left + (right - left) / 2;
+void mergeSort(int arr[], int aux[], int left, int right)
+{
+   if (left < right)
+   {
+      // Encontra o ponto médio
+      int middle = left + (right - left) / 2;
 
-        // Ordena a primeira e a segunda metades
-        mergeSort(arr, aux, left, middle);
-        mergeSort(arr, aux, middle + 1, right);
+      // Ordena a primeira e a segunda metades
+      mergeSort(arr, aux, left, middle);
+      mergeSort(arr, aux, middle + 1, right);
 
-        // Mescla as duas metades ordenadas
-        merge(arr, aux, left, middle, right);
-    }
+      // Mescla as duas metades ordenadas
+      merge(arr, aux, left, middle, right);
+   }
 }
 
-void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd){
+void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd, double &bestFOtime)
+{
 
    Solucao Sa, Si;
    srand(time(NULL));
    int melhor = 1000000;
    int qViz = 3;
-   int temp = 0; 
+   int temp = 0;
 
    clock_t h;
    double tempExec = 0;
@@ -1217,19 +1297,20 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd){
       VNS(Si, qViz, qtd);
       verificar_solucao(Si, false);
 
-
-      if(Si.funObj < melhor){
+      if (Si.funObj < melhor)
+      {
          // printf("Melhor: %d\n", Si.funObj);
          clonar_solucao(Si, Sa);
          melhor = Sa.funObj;
+         bestFOtime = tempExec;
       }
-      else{
+      else
+      {
          memset(&Si, 0, sizeof(Solucao));
       }
 
-
       h = clock() - h;
-      tempExec += (double)h/CLOCKS_PER_SEC;
+      tempExec += (double)h / CLOCKS_PER_SEC;
       temp++;
    }
 
@@ -1237,10 +1318,12 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd){
    // printf("Rodei %d vezes no grasp com tempo %f\n", temp, tempExec);
 }
 
-void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int instGroup){
+void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int instGroup)
+{
 
    Solucao s;
    char arq[50];
+   double bestFOtime = 0;
 
    ler_instancias_TCC(arq, Inst, Vez, instGroup);
    ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
@@ -1249,7 +1332,7 @@ void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int
 
    int qtdVns = (numBer_ * numNav_) * qtd;
 
-   grasp(s, ITmaxTempo, alpha, qtdVns);
+   grasp(s, ITmaxTempo, alpha, qtdVns, bestFOtime);
    // printf("TempSer = %d\n", s.temSer);
 
    // // imprimindo solução
@@ -1259,23 +1342,28 @@ void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int
    //    }
    //    printf("\n");
    // }
-  
+
    escrever_instancias_TCC(arq, Inst, Vez, s.funObj, instGroup, alpha, qtd);
+   escrever_instancias_arquivo_TCC(Inst, Vez, s.funObj, bestFOtime);
    escrever_solucao(s, arq);
 }
 
 void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup)
 {
 
-   switch (instGroup){
+   switch (instGroup)
+   {
    case 1: // trabalho de metodos
       sprintf(arq, ".//instancias//%s%d.txt", INST, Inst);
       ler_instancia(arq);
       break;
    case 2: // instancias moccia
-      if(Inst < 10){
+      if (Inst < 10)
+      {
          sprintf(arq, ".//instancias_moccia//%s0%d", INST_MOCCIA, Inst);
-      } else {
+      }
+      else
+      {
          sprintf(arq, ".//instancias_moccia//%s%d", INST_MOCCIA, Inst);
       }
       ler_instancia_moccia(arq);
@@ -1291,13 +1379,14 @@ void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup)
 void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instGroup, float alpha, int qtd)
 {
 
-   switch (instGroup){
+   switch (instGroup)
+   {
    case 1: // trabalho de metodos
       sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
       break;
    case 2: // instancias moccia
       // sprintf(arq, ".//instancias_moccia_result//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
-      sprintf(arq, ".//parametros_moccia//%s%d-%d-%d-%.2f-%d.sol", INST, Inst, Vez, funObj, alpha, qtd);
+      sprintf(arq, ".//moccia_final_result//%s%d-%d-%d-%.2f-%d.sol", INST, Inst, Vez, funObj, alpha, qtd);
       break;
    case 3: // instancias continuo - não concluido
       sprintf(arq, ".//instancias_moccia_result//%s%d-%d-%d.sol", INST, Inst, Vez, funObj);
@@ -1307,11 +1396,26 @@ void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instG
    }
 }
 
+void escrever_instancias_arquivo_TCC(int Inst, int Vez, int funObj, double time)
+{
+
+   FILE *file = fopen(".//moccia_final_result/resultados.csv", "a");  // Abre o arquivo no modo de adição (append)
+   if (file == NULL)
+   {
+      perror("Erro ao abrir o arquivo");
+      return;
+   }
+
+   fprintf(file, "%d,%d,%d,%.6f\n", Inst, Vez, funObj, time);
+
+   fclose(file); // Fecha o arquivo
+}
 
 void ler_instancia_moccia(char *arq)
 {
    FILE *f = fopen(arq, "r");
-   if (!f) {
+   if (!f)
+   {
       perror("Erro ao abrir o arquivo");
       exit(EXIT_FAILURE);
    }
@@ -1340,7 +1444,8 @@ void ler_instancia_moccia(char *arq)
    fclose(f);
 }
 
-void printarDadosSolucao(Solucao &s){
+void printarDadosSolucao(Solucao &s)
+{
    printf("\n\n\n\n");
 
    printf("vioHorMaxNav: %d \n", s.vioHorMaxNav);
@@ -1350,56 +1455,66 @@ void printarDadosSolucao(Solucao &s){
    printf("maiorQtdNavBer: %d \n", s.maiorQtdNavBer);
 
    printf("vetIdBerNav\n");
-   for (int j = 0; j < numNav_; j++){
+   for (int j = 0; j < numNav_; j++)
+   {
       printf("%d - ", s.vetIdBerNav[j]);
    }
    printf("\n\n\n");
 
    printf("vetIdBerNav\n");
-   for (int j = 0; j < numNav_; j++){
+   for (int j = 0; j < numNav_; j++)
+   {
       printf("%d - ", s.vetIdBerNav[j]);
    }
    printf("\n\n\n");
 
    printf("vetPosAtrNav\n");
-   for (int j = 0; j < numNav_; j++){
+   for (int j = 0; j < numNav_; j++)
+   {
       printf("%d - ", s.vetPosAtrNav[j]);
    }
    printf("\n\n\n");
 
    printf("vetPosFinNav\n");
-   for (int j = 0; j < numNav_; j++){
+   for (int j = 0; j < numNav_; j++)
+   {
       printf("%d - ", s.vetPosFinNav[j]);
    }
    printf("\n\n\n");
 
    printf("vetHorAtrNav\n");
-   for (int j = 0; j < numNav_; j++){
+   for (int j = 0; j < numNav_; j++)
+   {
       printf("%d - ", s.vetHorAtrNav[j]);
    }
    printf("\n\n\n");
 
    printf("vetHorSaiNav\n");
-   for (int j = 0; j < numNav_; j++){
+   for (int j = 0; j < numNav_; j++)
+   {
       printf("%d - ", s.vetHorSaiNav[j]);
    }
    printf("\n\n\n");
 
    printf("vetHorAlocProxNav\n");
-   for (int j = 0; j < numBer_; j++){
+   for (int j = 0; j < numBer_; j++)
+   {
       printf("%d - ", s.vetHorAlocProxNav[j]);
    }
    printf("\n\n\n");
 
    printf("vetQtdNavBer\n");
-   for (int j = 0; j < numBer_; j++){
+   for (int j = 0; j < numBer_; j++)
+   {
       printf("%d - ", s.vetQtdNavBer[j]);
    }
    printf("\n\n\n");
 
    printf("matSol\n");
-   for (int j = 0; j < numBer_; j++){
-      for (int i = 0; i < s.maiorQtdNavBer; i++){
+   for (int j = 0; j < numBer_; j++)
+   {
+      for (int i = 0; i < s.maiorQtdNavBer; i++)
+      {
          printf("%d - ", s.matSol[j][i]);
       }
       printf("\n");
