@@ -1287,7 +1287,8 @@ void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int
    // }
   
    escrever_instancias_TCC(arq, Inst, Vez, s.funObj, instGroup, alpha, qtd);
-   escrever_instancias_arquivo_TCC(Inst, Vez, s.funObj, bestFOtime);
+   // escrever_instancias_arquivo_TCC(Inst, Vez, s.funObj, bestFOtime);
+   escrever_instancias_arquivo_parametros_TCC(Inst, Vez, s.funObj, alpha, qtd);
    escrever_solucao(s, arq);
 }
 
@@ -1332,6 +1333,22 @@ void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instG
    default:
       break;
    }
+}
+
+
+void escrever_instancias_arquivo_parametros_TCC(int Inst, int Vez, int funObj, float alpha, int qtd)
+{
+
+   FILE *file = fopen(".//parametros_moccia/resultados.csv", "a");  // Abre o arquivo no modo de adição (append)
+   if (file == NULL)
+   {
+      perror("Erro ao abrir o arquivo");
+      return;
+   }
+
+   fprintf(file, "%d,%d,%d,%.2f,%d\n", Inst, Vez, funObj, alpha, qtd);
+
+   fclose(file); // Fecha o arquivo
 }
 
 void escrever_instancias_arquivo_TCC(int Inst, int Vez, int funObj, double time)
