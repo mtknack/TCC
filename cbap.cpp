@@ -46,37 +46,13 @@ int main()
    // iniciaGrasp(30, 1, 2);
 
    // TESTE MULTIPLO
-   float alpha = 0.6;
-   int qtd = 200;
+   float alpha = 0.2; // Porcentagem de escolha de soluções
+   int qtd = 200; // interações do VNS
    double ITmaxTempo = 120; // segundos
 
-   for (int i = 1; i < 6; i++){
-      for(int j = 0; j < 4; j++){
-         if(j == 0){
-            alpha = 0.2;
-         } else if(j == 1){
-            alpha = 0.4;
-         }else if(j == 2){
-            alpha = 0.6;
-         }else if(j == 3){
-            alpha = 0.8;
-         }
-
-         for(int z = 0; z < 4; z++){
-            if(z == 0){
-               qtd = 200;
-            } else if(z == 1){
-               qtd = 300;
-            }else if(z == 2){
-               qtd = 400;
-            }else if(z == 3){
-               qtd = 500;
-            }
-
-            iniciaGrasp(1, i, ITmaxTempo, alpha, qtd, 2);
-            iniciaGrasp(15, i, ITmaxTempo, alpha, qtd, 2);
-            iniciaGrasp(30, i, ITmaxTempo, alpha, qtd, 2);
-         }
+   for (int i = 1; i <= 30; i++){
+      for(int j = 1; j <= 10; j++){
+         iniciaGrasp(i, j, ITmaxTempo, alpha, qtd, 2);
       }
    }
 
