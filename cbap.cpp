@@ -48,7 +48,7 @@ int main()
    // TESTE MULTIPLO
    float alpha = 0;
    int qtd = 0;
-   double ITmaxTempo = 2; // segundos
+   double ITmaxTempo = 120; // segundos
 
    for (int i = 1; i < 6; i++){
       for(int j = 0; j < 4; j++){
