@@ -53,20 +53,20 @@ int main()
    for (int i = 1; i < 6; i++){
       for(int j = 0; j < 4; j++){
          if(j == 0){
-            alpha = 0.1;
-         } else if(j == 1){
-            alpha = 0.14;
-         }else if(j == 2){
-            alpha = 0.18;
-         }else if(j == 3){
             alpha = 0.2;
+         } else if(j == 1){
+            alpha = 0.4;
+         }else if(j == 2){
+            alpha = 0.6;
+         }else if(j == 3){
+            alpha = 0.8;
          }
 
          for(int z = 0; z < 4; z++){
             if(z == 0){
-               qtd = 0;
-            } else if(z == 1){
                qtd = 50;
+            } else if(z == 1){
+               qtd = 100;
             }else if(z == 2){
                qtd = 150;
             }else if(z == 3){
