@@ -17,33 +17,6 @@ int PESO_BER = 1000;
 //------------------------------------------------------------------------------
 int main()
 {
-   // clock_t h;
-   // Solucao sol;
-   // double tempo;
-   // char arq[50];
-   // sprintf(arq, ".\\instancias\\%s.txt", INST);
-   // ler_instancia(arq);
-   // ordenar_navios(vetIndNavOrd_, vetHorCheNav_);
-   // atualizar_dimensoes_bercos();
-   // criar_solucao(sol);
-   // calc_fo(sol);
-   // verificar_solucao(sol);
-   // strcpy(arq, "./instancias/inst1.sol");
-   // escrever_solucao(sol, arq);
-
-   // for (int j = 0; j < numBer_; j++){
-   //    for (int i = 0; i < sol.maiorQtdNavBer; i++){
-   //       printf("%d - ", sol.matSol[j][i]);
-   //    }
-   //    printf("\n");
-   // }
-
-   // TESTE UNICO DE INSTANCIA
-   // srand(time(NULL));
-   // testaVNS(1, 6);
-   // iniciaGrasp(30, 1, 2);
-
-   // TESTE MULTIPLO
    float alpha = 0.2;       // Porcentagem de escolha de soluções
    int qtd = 50;            // interações do VNS
    double ITmaxTempo = 120; // segundos
@@ -55,55 +28,6 @@ int main()
          iniciaGrasp(i, j, ITmaxTempo, alpha, qtd, 2);
       }
    }
-
-   // COLETAR DADOS PARA A TABELA DO TRABALHO 2
-   //  srand(time(NULL));
-
-   // char arq1[50], arq2[50];
-   // for (int i = 1; i < 6; i++){
-   //    for(int j = 1; j < 4;j++){
-   //       tempMelhorSol = 0;
-   //       testaVNS(i, j);
-   //       printf("inst%d-vez%d MelhorTempFO = %f\n",i,j,tempMelhorSol);
-   //    }
-   // }
-
-   //-------------------------
-   //--- Coletar tempos da construtiva e c�lculo de FO
-   /*h = clock();
-   criar_solucao(sol);
-   tempo = (clock() - (double)h) / CLOCKS_PER_SEC;
-   calc_fo(sol);
-   printf("\nSI --> FO: %d\tTempo: %.5f\n", sol.funObj, tempo);
-   h = clock();
-   for (int i = 0; i < 100000; i++)
-      criar_solucao(sol);
-   tempo = (clock() - (double)h) / CLOCKS_PER_SEC;
-   printf("Tempo SI: %.5f\n", tempo);
-   h = clock();
-   for (int i = 0; i < 100000; i++)
-      calc_fo(sol);
-   tempo = (clock() - (double)h) / CLOCKS_PER_SEC;
-   printf("Tempo FO: %.5f\n", tempo);*/
-   //-------------------------
-   //--- Testar entrada
-   // strcpy(arq, "teste.txt");
-   // testar_instancia(arq);
-   //-------------------------
-   //--- Testar dimens�es dos ber�os
-   // for (int i = 0; i < numBer_; i++)
-   //   printf("%d  -  %d\n", vetPosIniBer_[i], vetPosFinBer_[i]);
-   //-------------------------
-   //--- Testar ordena��o
-   // for (int i = 0; i < numNav_; i++)
-   //   printf("%d %d\n", vetIndNavOrd_[i]+1, vetHorCheNav_[vetIndNavOrd_[i]]);
-   //-------------------------
-   //--- Testar leitura de solu��o
-   // sprintf(arq, "%s.sol", INST);
-   // ler_solucao(sol, arq);
-   // strcpy(arq, "");
-   // escrever_solucao(sol, arq);
-   //-------------------------
 
    return 0;
 }
@@ -207,6 +131,7 @@ void ajustar_hor_pos_berco(Solucao &s, const int &ber)
       }
    }
 }
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 void ordenar_nav_hor_che(Solucao &s, int ber)
@@ -241,6 +166,8 @@ void ordenar_nav_hor_che(Solucao &s, int ber)
       s.matSol[ber][i] = vetNavOrdNoBer[i];
    }
 }
+//------------------------------------------------------------------------------
+
 //------------------------------------------------------------------------------
 void calc_fo(Solucao &s)
 {
@@ -651,10 +578,7 @@ void ler_instancia(char *arq)
 }
 //------------------------------------------------------------------------------
 
-// novo ------------------------------------------------------------------------
-
-// novo ------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------
 void testaVNS(int Inst, int Vez)
 {
    // --------------------- Inicializando padrão ----------------------- //
@@ -719,7 +643,9 @@ void testaVNS(int Inst, int Vez)
    sprintf(arq, ".//instancias//%s%d-%d-%d.sol", INST, Inst, Vez, s.funObj);
    escrever_solucao(s, arq);
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void VNS(Solucao &S, int qViz, int qtd)
 {
    Solucao S1;
@@ -770,7 +696,9 @@ void VNS(Solucao &S, int qViz, int qtd)
       // printarDadosSolucao(S1);
    }
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void gerarViz1(Solucao &S, bool att)
 {
    int nav1, nav2, ber1, ber2, camada1, camada2, teste = true;
@@ -837,7 +765,9 @@ void gerarViz1(Solucao &S, bool att)
 
    calc_fo(S);
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void gerarViz2(Solucao &S)
 { // Troca somente um navio de berco aleatório
    int nav1, ber1, ber2, camada1, teste = true;
@@ -892,7 +822,9 @@ void gerarViz2(Solucao &S)
 
    calc_fo(S);
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void heuBLPM(Solucao &s) // Heuristica primeira melhora
 {
    Solucao s1;
@@ -951,7 +883,9 @@ INICIO:;
       }
    }
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void gerarViz3(Solucao &S)
 { // troca dois navios numBer_ vezes sucessivamente
 
@@ -967,7 +901,9 @@ void gerarViz3(Solucao &S)
    inicializar_hor_pos_navios(S);
    calc_fo(S);
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void gerarViz4(Solucao &S)
 { // Troca somente um navio de berco aleatório varias vezes
    int nav1, ber1, ber2, camada1, roda = 0, teste = true;
@@ -1005,7 +941,9 @@ void gerarViz4(Solucao &S)
    inicializar_hor_pos_navios(S);
    calc_fo(S);
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void criar_solucao_por_tamanho(Solucao &s, float alpha)
 {
    int nav, ber, aux;
@@ -1058,7 +996,9 @@ void criar_solucao_por_tamanho(Solucao &s, float alpha)
       if (s.vetQtdNavBer[i] >= s.maiorQtdNavBer)
          s.maiorQtdNavBer = s.vetQtdNavBer[i];
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void descobre_tam_total_dos_bercos()
 {
    for (int i = 0; i < numBer_; i++)
@@ -1077,31 +1017,10 @@ void descobre_tam_total_dos_bercos()
       vetIdBerOrdTamTotal_[i] = i;  // somente para preencher o vetor com os ids
       vetIdBercoMelhorTemp_[i] = i; // somente para preencher o vetor com os ids
    }
-
-   // for (int i = 0; i < numBer_; i++)
-   // {
-   //    printf("%d - ", vetTamTotalBer_[i]);
-   // }
-   // printf("\n");
-   // for (int i = 0; i < numBer_; i++)
-   // {
-   //    printf("%d - ", vetIdBerOrdTamTotal_[i]);
-   // }
-
-   // printf("\n");
-   // ordernar_berco_asc();
-
-   // for (int i = 0; i < numBer_; i++)
-   // {
-   //    printf("%d - ", vetTamTotalBer_[i]);
-   // }
-   // printf("\n");
-   // for (int i = 0; i < numBer_; i++)
-   // {
-   //    printf("%d - ", vetIdBerOrdTamTotal_[i]);
-   // }
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void ordernar_berco_asc()
 {
    int auxTam, auxId;
@@ -1122,7 +1041,9 @@ void ordernar_berco_asc()
       }
    }
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 int verificaMenorTempoBer(Solucao &s, int nav, float alpha)
 {
 
@@ -1195,6 +1116,9 @@ int verificaMenorTempoBer(Solucao &s, int nav, float alpha)
    return vetAuxIdBerco[rand() % porcentagemBercos];
    // return vetAuxIdBerco[0];
 }
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 
 // Função para mesclar dois subvetores de vetAuxTemp e vetAuxIdBerco[]
 void merge(int arr[], int aux[], int left, int middle, int right)
@@ -1275,7 +1199,9 @@ void mergeSort(int arr[], int aux[], int left, int right)
       merge(arr, aux, left, middle, right);
    }
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd, double &bestFOtime)
 {
 
@@ -1317,7 +1243,9 @@ void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd, double &bestFOti
    clonar_solucao(Sa, s);
    // printf("Rodei %d vezes no grasp com tempo %f\n", temp, tempExec);
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int instGroup)
 {
 
@@ -1347,7 +1275,9 @@ void iniciaGrasp(int Inst, int Vez, double ITmaxTempo, float alpha, int qtd, int
    escrever_instancias_arquivo_TCC(Inst, Vez, s.funObj, bestFOtime);
    escrever_solucao(s, arq);
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup)
 {
 
@@ -1375,7 +1305,9 @@ void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup)
       break;
    }
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instGroup, float alpha, int qtd)
 {
 
@@ -1395,7 +1327,9 @@ void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instG
       break;
    }
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void escrever_instancias_arquivo_TCC(int Inst, int Vez, int funObj, double time)
 {
 
@@ -1410,7 +1344,9 @@ void escrever_instancias_arquivo_TCC(int Inst, int Vez, int funObj, double time)
 
    fclose(file); // Fecha o arquivo
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void ler_instancia_moccia(char *arq)
 {
    FILE *f = fopen(arq, "r");
@@ -1443,7 +1379,9 @@ void ler_instancia_moccia(char *arq)
 
    fclose(f);
 }
+//------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
 void printarDadosSolucao(Solucao &s)
 {
    printf("\n\n\n\n");
