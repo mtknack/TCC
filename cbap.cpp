@@ -45,7 +45,7 @@ int main()
 
    // TESTE MULTIPLO
    float alpha = 0.2;       // Porcentagem de escolha de soluções
-   int qtd = 200;           // interações do VNS
+   int qtd = 50;            // interações do VNS
    double ITmaxTempo = 120; // segundos
 
    for (int i = 1; i <= 30; i++)
