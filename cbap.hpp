@@ -51,44 +51,28 @@ int vetIdBercoMelhorTemp_[MAX_BER]; // vetor com os ids do berco que com o barco
 //********************************* M�TODOS **********************************
 void ajustar_hor_pos_berco(Solucao &s, const int &ber);
 void calc_fo(Solucao &s);
-void criar_solucao(Solucao &s);
 void inicializar_hor_pos_navios(Solucao &s);
 bool navios_sobrepostos(Solucao &s, const int &n1, const int &n2);
 void verificar_solucao(Solucao &s, bool indicador);
-void ler_solucao(Solucao &s, char *arq);
 void escrever_solucao(Solucao &s, char *arq);
 void clonar_solucao(Solucao &o, Solucao &c);
 void ordenar_navios(int *vetInd, int *vetVal);
-void testar_instancia(char *arq);
 void atualizar_dimensoes_bercos();
 void ler_instancia(char *arq);
 void criar_solucao_por_tamanho(Solucao &s, float alpha);
 void descobre_tam_total_dos_bercos();
-void ordernar_berco_asc();
-void inicializar_hor_pos_navios_2(Solucao &s);
 int verificaMenorTempoBer(Solucao &s, int nav, float alpha);
-void merge(int arr[], int aux[], int left, int middle, int right);
-void mergeSort(int arr[], int aux[], int left, int right);
 
-// novo
-void printarDadosSolucao(Solucao &s);
 void iniciaGrasp(int Inst, int Vez,  double ITmaxTempo, float alpha, int qtd, int instGroup);
 void ler_instancia_moccia(char *arq);
 void ler_instancias_TCC(char *arq, int Inst, int Vez, int instGroup);
 void escrever_instancias_TCC(char *arq, int Inst, int Vez, int funObj, int instGroup, float alpha, int qtd);
 void escrever_instancias_arquivo_TCC(int Inst, int Vez, int funObj, double time);
 void grasp(Solucao &s, double ITmaxTempo, float alpha, int qtd, double &bestFOtime);
-void testaVNS(int Inst, int Vez);
-void ordenar_nav_hor_che(Solucao &s,int ber); // ordena os navios por ordem de chegada
-// void VNS(Solucao &S, double ITmaxTempo, int qViz, int qtd);
 void VNS(Solucao &S, int qViz, int qtd);
-void heuBLPM(Solucao &S); // Heuristica primeira melhora
 void gerarViz1(Solucao &S,bool att); // troca dois navios aleatorios entre si
 void gerarViz2(Solucao &S); // troca um navio aleatorio de berço
 void gerarViz3(Solucao &S); // troca dois navios aleatorios entre numBer_ vezes
-void gerarViz4(Solucao &S); // troca um navio aleatorio de berço numBer_ vezes
 
 #endif
-
-// Pegar info do professor
 double tempMelhorSol;
