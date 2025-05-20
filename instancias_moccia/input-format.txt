@@ -1,0 +1,11 @@
+File format  - berth allocation with spatial constraints - Results Table 7 TS paper
+------------------------------------------
+first row: n number of vessels, m number of berths
+m rows with n columns with processing times of the n vessels over the m berths
+m rows with 3 values: s^k start of availability time of berth k, e^k end of availability time of berth k, s^k - e^k (redundant)
+a row with n values: a_i arrival time of ship i; 
+a row with n values:  b_i upper bound of the service time window on the ship i; (Note: in this instance set time windows upper bounds are disabled, then b_i has an high value > max e^k)
+m rows with the following berth data: length left side, length right side, index of the left neighbor berth,index of the right neighbor berth 
+(Note, if one of these last two values is zero, the berth presents an obstacle on that side).
+a row with n values:  vessel length, including safety distance
+The last row can be ignored

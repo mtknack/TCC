@@ -1,0 +1,10 @@
+n number of vessels
+m number of berths
+a row with n values: a_i arrival time of ship i; 
+a row with m values: s^k start of availability time of berth k
+n rows with m columns with processing times of the n vessels over the m berths
+a row with m values: e^k end of availability time of berth k
+a row with n values:  b_i upper bound of the service time window on the ship i
+
+m rows with the following berth data: length left side, length right side	(only for set 3)
+a row with n values: vessel length, including safety distance			(only for set 3)
