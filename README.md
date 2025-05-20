@@ -39,7 +39,7 @@ O Problema de Alocação de Berços Contínuos (PAB-CH) é um desafio NP-difíci
 
 ## :books: Revisão de Literatura
 - **PAB**: Modelos discreto, contínuo e híbrido; representação bidimensional como retângulos (Figura 2).  
-  ![Figura 2: Representação bidimensional do PAB-CH](images/figura2.png)
+  ![Figura 2: Representação bidimensional do PAB-CH](images/PABCH.png)
 - **GRASP** (Greedy Randomized Adaptive Search Procedure): fases de construção e busca local.  
 - **VNS** (Variable Neighborhood Search): movimentos de troca, remoção/realocação e perturbação.
 
